@@ -188,9 +188,9 @@ WFSFileClient <- setRefClass(
       }
       if (!missing(parameters)) {
         ogr2ogrParams <- ""
-        # Not needed for rgdal >= 0.9.1
-        #if (!is.null(parameters$splitListFields) && parameters$splitListFields)
-        #  ogr2ogrParams <- paste(ogr2ogrParams, "-splitlistfields")
+        # -splitlistfields not needed for rgdal >= 0.9.1
+        if (!is.null(parameters$splitListFields) && parameters$splitListFields)
+          ogr2ogrParams <- paste(ogr2ogrParams, "-splitlistfields")
         if (!is.null(parameters$explodeCollections) && parameters$explodeCollections)
           ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
         if (ogr2ogrParams != "")
