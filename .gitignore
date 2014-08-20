@@ -6,4 +6,7 @@
 
 # R data files from past sessions
 .Rdata
+<<<<<<< HEAD
 .Rproj.user
+=======
+>>>>>>> fcf16b08974a8e9139c417d8000b3530baefbefd
