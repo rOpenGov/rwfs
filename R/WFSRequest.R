@@ -16,7 +16,7 @@
 #'
 #' @import methods
 #' @references See citation("rwfs")
-#' @author Jussi Jousimo \email{louhos@@googlegroups.com}
+#' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSRequest
 #' @export WFSRequest
 WFSRequest <- setRefClass(
@@ -55,6 +55,11 @@ WFSRequest <- setRefClass(
     
     getStreamURL = function(operation) {
       return(paste0("WFS:", getURL()))
+    },
+    
+    show = function() {
+      getURL()
+      return(invisible(.self))
     }
   )
 )

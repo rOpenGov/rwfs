@@ -8,7 +8,7 @@
 An abstract class to build WFS request URL's.
 }
 \author{
-Jussi Jousimo \email{louhos@googlegroups.com}
+Jussi Jousimo \email{jvj@iki.fi}
 }
 \references{
 See citation("rwfs")
