@@ -3,11 +3,23 @@
 \name{WFSStreamClient-class}
 \alias{WFSStreamClient}
 \alias{WFSStreamClient-class}
-\title{Streams response from a WFS.}
+\title{Streams response from a WFS}
 \description{
-Streams response from a WFS.
+Dispatches WFS request and parses response from the stream. Provides a caching mechanism
+for the same subsequent queries. The absract method \code{\link{getRasterURL}} should be overloaded for
+raster queries and possibly \code{\link{importRaster}} as well.
 }
+\section{Methods}{
+
+\describe{
+\item{\code{getLayer(request, layer, crs = NULL, swapAxisOrder = FALSE, parameters)}}{Returns layer data from a WFS query.}
+
+\item{\code{listLayers(request)}}{Lists data layers from a WFS query.}
+}}
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
+}
+\seealso{
+\code{\link{WFSRequest}}, \code{\link{WFSFileClient}}
 }
 

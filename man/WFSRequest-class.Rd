@@ -3,14 +3,28 @@
 \name{WFSRequest-class}
 \alias{WFSRequest}
 \alias{WFSRequest-class}
-\title{An abstract class to build WFS request URL's.}
+\alias{getURL}
+\title{An abstract class to build WFS request URL's}
 \description{
-An abstract class to build WFS request URL's.
+This class should be inherited and the abstract method \code{getURL} overloaded to provide WFS request URL's.
 }
+\section{Methods}{
+
+\describe{
+\item{\code{getParametersString()}}{Returns WFS request URL parameters as a string.}
+
+\item{\code{getPathString()}}{Returns WFS request URL path as a string.}
+
+\item{\code{getURL()}}{Returns WFS request URL.}
+
+\item{\code{setParameters(...)}}{Sets WFS request URL parameters.}
+
+\item{\code{setPath(path)}}{Sets WFS request URL path.}
+}}
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
 }
-\references{
-See citation("rwfs")
+\seealso{
+\code{\link{WFSStreamClient}}, \code{\link{WFSFileClient}}
 }
 

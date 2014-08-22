@@ -3,11 +3,27 @@
 \name{WFSFileClient-class}
 \alias{WFSFileClient}
 \alias{WFSFileClient-class}
-\title{Reads response from a file instead of a WFS service directly.}
+\title{Reads response from a file instead of a WFS service directly}
 \description{
-Reads response from a file instead of a WFS service directly.
+Dispatches WFS request, saves response to a file and parses the file.
+The absract method \code{\link{getRasterURL}} should be overloaded for raster queries and possibly
+\code{\link{importRaster}} as well.
 }
+\section{Methods}{
+
+\describe{
+\item{\code{getLayer(request, layer, crs = NULL, swapAxisOrder = FALSE, parameters)}}{Returns layer data from a WFS query.}
+
+\item{\code{listLayers(request)}}{Lists data layers from a WFS query.}
+
+\item{\code{loadGMLFile(fromFile)}}{Loads saved GML file into the object for parsing.}
+
+\item{\code{saveGMLFile(destFile)}}{Saves cached response to a file in GML format.}
+}}
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
+}
+\seealso{
+\code{\link{WFSRequest}}, \code{\link{WFSStreamClient}}
 }
 

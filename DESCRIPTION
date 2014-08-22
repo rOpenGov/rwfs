@@ -12,9 +12,12 @@ Depends:
 Imports:
     methods,
     rgdal
+Suggests:
+    raster
 URL: https://github.com/ropengov/rwfs
 LazyLoad: yes
 Collate:
     'WFSRequest.R'
     'WFSClient.R'
     'common.R'
+    'pkgname.R'

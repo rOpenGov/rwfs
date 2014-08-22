@@ -20,8 +20,7 @@
 #' @return Character string in ISO8601 format.
 #' @examples asISO8601("2014-01-01")
 #'
-#' @author Jussi Jousimo \email{louhos@@googlegroups.com}
-#' @references See citation("rwfs")
+#' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @export
 
 asISO8601 <- function(dt) return(strftime(dt, "%Y-%d-%mT%H:%M:%SZ"))

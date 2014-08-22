@@ -14,7 +14,9 @@
 
 #' @include WFSRequest.R
 
-#' An abstract class to make requests to a WFS.
+#' @title WFS client abstract reference class
+#' 
+#' @aliases getRasterURL importRaster
 #'
 #' @import methods
 #' @import rgdal
@@ -50,20 +52,51 @@ WFSClient <- setRefClass(
     },
     
     listLayers = function(request) {
+      "Lists data layers from a WFS query."
       stop("Unimplemented method.")
     },
     
     getLayer = function(request, layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
+      "Returns layer data from a WFS query."
+      stop("Unimplemented method.")
+    },
+
+    getRasterURL = function(request) {
+      "Returns raster URL from a WFS query response."
       stop("Unimplemented method.")
     },
     
-    getRaster = function(request, crs, NAvalue) {
-      stop("Unimplemented method.")
+    importRaster = function(destFile) {
+      "Imports raster from downloaded file."
+      raster <- raster::brick(destFile)
+      return(raster)
+    },
+    
+    getRaster = function(request) {
+      "Returns raster from WFS query."
+      rasterURL <- getRasterURL(request=request)
+      if (length(rasterURL) == 0) return(character())
+      
+      destFile <- tempfile()
+      success <- download.file(rasterURL, destfile=destFile)
+      if (success != 0) {
+        warning("Failed to download raster file.")
+        return(character())
+      }
+      
+      raster <- importRaster(destFile)
+      return(raster)
     }
   )
 )
 
-#' Streams response from a WFS.
+#' @title Streams response from a WFS
+#' 
+#' @description Dispatches WFS request and parses response from the stream. Provides a caching mechanism
+#' for the same subsequent queries. The absract method \code{\link{getRasterURL}} should be overloaded for
+#' raster queries and possibly \code{\link{importRaster}} as well.
+#'
+#' @seealso \code{\link{WFSRequest}}, \code{\link{WFSFileClient}}
 #'
 #' @import methods
 #' @import rgdal
@@ -100,7 +133,13 @@ WFSStreamClient <- setRefClass(
   )
 )
 
-#' Reads response from a file instead of a WFS service directly.
+#' @title Reads response from a file instead of a WFS service directly
+#' 
+#' @description Dispatches WFS request, saves response to a file and parses the file.
+#' The absract method \code{\link{getRasterURL}} should be overloaded for raster queries and possibly
+#' \code{\link{importRaster}} as well.
+#'
+#' @seealso \code{\link{WFSRequest}}, \code{\link{WFSStreamClient}}
 #'
 #' @import methods
 #' @import rgdal
@@ -122,6 +161,7 @@ WFSFileClient <- setRefClass(
     },
     
     saveGMLFile = function(destFile) {
+      "Saves cached response to a file in GML format."
       if (missing(destFile))
         stop("Required argument 'destFile' missing.")
       if (length(cachedResponseFile) == 0 || !file.exists(cachedResponseFile))
@@ -131,6 +171,7 @@ WFSFileClient <- setRefClass(
     },
     
     loadGMLFile = function(fromFile) {
+      "Loads saved GML file into the object for parsing."
       if (missing(fromFile))
         stop("Required argument 'fromFile' missing.")
       if (!file.exists(fromFile))

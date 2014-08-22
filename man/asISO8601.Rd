@@ -18,9 +18,6 @@ Converts an object which can be converted to a POSIXlt object to a ISO8601 date 
 asISO8601("2014-01-01")
 }
 \author{
-Jussi Jousimo \email{louhos@googlegroups.com}
-}
-\references{
-See citation("rwfs")
+Jussi Jousimo \email{jvj@iki.fi}
 }
 

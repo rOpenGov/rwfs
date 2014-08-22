@@ -12,10 +12,14 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' An abstract class to build WFS request URL's.
+#' @title An abstract class to build WFS request URL's
+#'
+#' @description This class should be inherited and the abstract method \code{getURL} overloaded to provide WFS request URL's.
+#'
+#' @seealso \code{\link{WFSStreamClient}}, \code{\link{WFSFileClient}}
+#' @aliases getURL
 #'
 #' @import methods
-#' @references See citation("rwfs")
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSRequest
 #' @export WFSRequest
@@ -27,33 +31,38 @@ WFSRequest <- setRefClass(
   ),
   methods = list(
     setPath = function(path) {
+      "Sets WFS request URL path."
       path <<- path
       return(invisible(.self))
     },
     
     setParameters = function(...) {
+      "Sets WFS request URL parameters."
       parameters <<- list(...)
       return(invisible(.self))
     },
     
     getPathString = function() {
+      "Returns WFS request URL path as a string."
       if (length(path) == 0) return("")
       p <- paste(path, collapse="/")
       return(p)
     },
     
     getParametersString = function() {
+      "Returns WFS request URL parameters as a string."
       if (length(parameters) == 0) return("")
       x <- lapply(seq_along(parameters), function(i) paste(names(parameters)[[i]], parameters[[i]], sep="="))
       p <- paste(x, collapse="&")
       return(p)
     },
     
-    getURL = function(operation) {
+    getURL = function() {
+      "Returns WFS request URL."
       stop("Unimplemented method.")
     },
     
-    getStreamURL = function(operation) {
+    getStreamURL = function() {
       return(paste0("WFS:", getURL()))
     },
     
