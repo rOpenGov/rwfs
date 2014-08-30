@@ -19,6 +19,7 @@
 #' @aliases getRasterURL importRaster
 #'
 #' @import methods
+#' @import sp
 #' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSClient
@@ -32,10 +33,17 @@ WFSClient <- setRefClass(
       if (!inherits(dataSource, "character"))
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       
-      layers <- rgdal::ogrListLayers(dsn=dataSource)
-      if (inherits(layers, "try-error") && length(grep("Cannot open data source", layers)) == 1) {
-        stop("Error in query result. Invalid query?")
+      layers <- try(rgdal::ogrListLayers(dsn=dataSource)) 
+      if (inherits(layers, "try-error")) {
+        if (length(grep("Cannot open data source", layers)) == 1) {
+          # GDAL < 1.11.0 returns "Cannot open data source" for connection problems and zero layer responses
+          # GDAL >= 1.11.0 returns no layers for zero layer responses
+          warning("Unable to connect to the data source or error in query result.")
+          return(character(0))
+        }
+        else stop("Fatal error.")
       }
+      
       return(layers)
     },
     
@@ -46,7 +54,24 @@ WFSClient <- setRefClass(
         stop("Required argument 'layer' missing.")
       if (!inherits(dataSource, "character"))
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
-      response <- rgdal::readOGR(dsn=dataSource, layer=layer, p4s=crs, swapAxisOrder=swapAxisOrder, stringsAsFactors=FALSE)
+
+      #response <- try(rgdal::readOGR(dsn=dataSource, layer=layer, p4s=crs, swapAxisOrder=swapAxisOrder, stringsAsFactors=FALSE)) # Works only in rgdal >= 0.9
+      response <- try(rgdal::readOGR(dsn=dataSource, layer=layer, p4s=crs, stringsAsFactors=FALSE))
+      if (inherits(response, "try-error")) {
+        if (length(grep("Cannot open data source", response)) == 1) {
+          warning("Unable to connect to the data source or error in query result.")
+          return(character(0))
+        }
+        else stop("Fatal error.")
+      }
+      
+      # Hack and will be removed once rgdal 0.9 becomes available in CRAN
+      if (swapAxisOrder) {
+        xy <- sp::coordinates(response)
+        response@coords <- xy[,2:1]
+        response@bbox <- response@bbox[2:1,]
+        rownames(response@bbox) <- rownames(response@bbox)[2:1]
+      }
       
       return(response)
     },
@@ -61,7 +86,7 @@ WFSClient <- setRefClass(
       stop("Unimplemented method.")
     },
 
-    getRasterURL = function(request) {
+    getRasterURL = function(request, parameters) {
       "Returns raster URL from a WFS query response."
       stop("Unimplemented method.")
     },
@@ -72,9 +97,9 @@ WFSClient <- setRefClass(
       return(raster)
     },
     
-    getRaster = function(request) {
+    getRaster = function(request, parameters) {
       "Returns raster from WFS query."
-      rasterURL <- getRasterURL(request=request)
+      rasterURL <- getRasterURL(request=request, parameters=parameters)
       if (length(rasterURL) == 0) return(character())
       
       destFile <- tempfile()
@@ -192,7 +217,7 @@ WFSFileClient <- setRefClass(
         success <- download.file(dataSourceURL, cachedResponseFile, "internal")
         if (success != 0) {
           warning("Query failed.")
-          return(character())
+          return(character(0))
         }
       }
       return(invisible(.self))
@@ -210,8 +235,10 @@ WFSFileClient <- setRefClass(
     },
     
     listLayers = function(request) {
-      if (!missing(request))
-        cacheResponse(dataSource=request$getURL())
+      if (!missing(request)) {
+        success <- cacheResponse(dataSource=request$getURL())
+        if (is.character(success)) return(character(0))
+      }
       else {
         if (cachedResponseFile == "")
           stop("Specify 'request' argument or load file with 'loadGLMFile'.")
@@ -221,8 +248,10 @@ WFSFileClient <- setRefClass(
     },
     
     getLayer = function(request, layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
-      if (!missing(request))
-        cacheResponse(dataSourceURL=request$getURL())
+      if (!missing(request)) {
+        success <- cacheResponse(dataSourceURL=request$getURL())
+        if (is.character(success)) return(character(0))
+      }
       else {
         if (cachedResponseFile == "")
           stop("Specify 'request' argument or load file with 'loadGLMFile'.")        
