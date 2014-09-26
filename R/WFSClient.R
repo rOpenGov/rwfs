@@ -225,7 +225,9 @@ WFSFileClient <- setRefClass(
     
     convert = function(sourceFile, layer, parameters) {
       destFile <- tempfile()
-      errorCode <- system(paste("ogr2ogr -f GML", parameters, destFile, cachedResponseFile, layer))
+      cmd <- paste("ogr2ogr -f GML", parameters, destFile, cachedResponseFile, layer)
+      message(cmd)
+      errorCode <- system(cmd)
       if (errorCode != 0) {
         stop("Conversion failed.")
       }
