@@ -228,12 +228,20 @@ WFSFileClient <- setRefClass(
     
     convert = function(sourceFile=cachedResponseFile, layer, parameters) {
       destFile <- tempfile()
+      
+      # QUICKFIX: I don't know why ogr2ogr fails to convert the original file (under Linux at least),
+      # but if it's copied to new location, everything seems to be fine
+      ufoBugFix <- tempfile()
+      file.copy(sourceFile, ufoBugFix)
+      sourceFile <- ufoBugFix
+      
       cmd <- paste("ogr2ogr -f GML", parameters, destFile, sourceFile, layer)
       message(cmd)
       errorCode <- system(cmd)
       if (errorCode != 0) {
         stop("Conversion failed.")
       }
+      
       #unlink(cachedResponseFile)
       #cachedResponseFile <<- destFile
       return(destFile)
