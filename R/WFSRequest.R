@@ -67,7 +67,7 @@ WFSRequest <- setRefClass(
     },
     
     show = function() {
-      getURL()
+      cat(getURL(), "\n")
       return(invisible(.self))
     }
   )

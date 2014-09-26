@@ -175,12 +175,14 @@ WFSFileClient <- setRefClass(
   "WFSFileClient",
   contains = "WFSClient",
   fields = list(
+    tempDir = "character",
     cachedDataSourceURL = "character",
     cachedResponseFile = "character"
   ),
   methods = list(
-    initialize = function(...) {
+    initialize = function(tempDir=tempdir(), ...) {
       callSuper(...)
+      tempDir <<- tempDir
       cachedDataSourceURL <<- ""
       cachedResponseFile <<- ""
     },
@@ -213,8 +215,9 @@ WFSFileClient <- setRefClass(
       
       if (cachedDataSourceURL != dataSourceURL) {
         cachedDataSourceURL <<- dataSourceURL
-        cachedResponseFile <<- tempfile()
+        cachedResponseFile <<- tempfile(tmpdir=tempDir)
         success <- download.file(dataSourceURL, cachedResponseFile, "internal")
+        message("Response cached to ", cachedResponseFile)
         if (success != 0) {
           warning("Query failed.")
           return(character(0))
@@ -223,22 +226,23 @@ WFSFileClient <- setRefClass(
       return(invisible(.self))
     },
     
-    convert = function(sourceFile, layer, parameters) {
+    convert = function(sourceFile=cachedResponseFile, layer, parameters) {
       destFile <- tempfile()
-      cmd <- paste("ogr2ogr -f GML", parameters, destFile, cachedResponseFile, layer)
+      cmd <- paste("ogr2ogr -f GML", parameters, destFile, sourceFile, layer)
       message(cmd)
       errorCode <- system(cmd)
       if (errorCode != 0) {
         stop("Conversion failed.")
       }
-      unlink(cachedResponseFile)
-      cachedResponseFile <<- destFile
-      return(invisible(.self))
+      #unlink(cachedResponseFile)
+      #cachedResponseFile <<- destFile
+      return(destFile)
+      #return(invisible(.self))
     },
     
     listLayers = function(request) {
       if (!missing(request)) {
-        success <- cacheResponse(dataSource=request$getURL())
+        success <- cacheResponse(dataSourceURL=request$getURL())
         if (is.character(success)) return(character(0))
       }
       else {
@@ -258,6 +262,8 @@ WFSFileClient <- setRefClass(
         if (cachedResponseFile == "")
           stop("Specify 'request' argument or load file with 'loadGLMFile'.")        
       }
+      
+      sourceFile <- cachedResponseFile
       if (!missing(parameters)) {
         ogr2ogrParams <- ""
         # -splitlistfields not needed for rgdal >= 0.9.1
@@ -266,9 +272,9 @@ WFSFileClient <- setRefClass(
         if (!is.null(parameters$explodeCollections) && parameters$explodeCollections)
           ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
         if (ogr2ogrParams != "")
-          convert(layer=layer, parameters=ogr2ogrParams)
+          sourceFile <- convert(layer=layer, parameters=ogr2ogrParams)
       }
-      response <- .private.getLayer(dataSource=cachedResponseFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
+      response <- .private.getLayer(dataSource=sourceFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
       return(response)
     }
   )
