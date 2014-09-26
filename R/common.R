@@ -23,4 +23,4 @@
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @export
 
-asISO8601 <- function(dt) return(strftime(dt, "%Y-%d-%mT%H:%M:%SZ"))
+asISO8601 <- function(dt) return(strftime(dt, "%Y-%m-%dT%H:%M:%SZ"))
