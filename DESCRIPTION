@@ -21,4 +21,5 @@ Collate:
     'WFSRequest.R'
     'WFSClient.R'
     'common.R'
+    'firstlib.R'
     'pkgname.R'
