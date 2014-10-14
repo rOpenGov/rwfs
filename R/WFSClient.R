@@ -176,9 +176,9 @@ WFSFileClient <- R6::R6Class(
   "WFSFileClient",
   inherit = WFSClient,
   private = list(
-    tempDir = "character",
-    cachedDataSourceURL = "character",
-    cachedResponseFile = "character",
+    tempDir = NA,
+    cachedDataSourceURL = "",
+    cachedResponseFile = "",
     
     cacheResponse = function(dataSourceURL) {
       if (missing(dataSourceURL))
@@ -197,36 +197,9 @@ WFSFileClient <- R6::R6Class(
         }
       }
       return(invisible(self))
-    }    
-  ),
-  public = list(
-    initialize = function(tempDir=tempdir(), ...) {
-      callSuper(...)
-      private$tempDir <- tempDir
-      private$cachedDataSourceURL <- ""
-      private$cachedResponseFile <- ""
     },
     
-    saveGMLFile = function(destFile) {
-      "Saves cached response to a file in GML format."
-      if (missing(destFile))
-        stop("Required argument 'destFile' missing.")
-      if (length(private$cachedResponseFile) == 0 || !file.exists(private$cachedResponseFile))
-        stop("Response file missing. No query has been made?")
-      file.copy(private$cachedResponseFile, destFile)
-      return(invisible(self))
-    },
     
-    loadGMLFile = function(fromFile) {
-      "Loads saved GML file into the object for parsing."
-      if (missing(fromFile))
-        stop("Required argument 'fromFile' missing.")
-      if (!file.exists(fromFile))
-        stop("File does not exist.")
-      private$cachedResponseFile <<- fromFile
-      return(invisible(self))
-    },
-        
     convert = function(sourceFile=private$cachedResponseFile, layer, parameters) {
       destFile <- tempfile()
       
@@ -247,15 +220,41 @@ WFSFileClient <- R6::R6Class(
       #private$cachedResponseFile <<- destFile
       return(destFile)
       #return(invisible(self))
+    }
+  ),
+  public = list(
+    initialize = function(tempDir=tempdir(), ...) {
+      #super$initialize(...)
+      private$tempDir <- tempDir
     },
     
+    saveGMLFile = function(destFile) {
+      "Saves cached response to a file in GML format."
+      if (missing(destFile))
+        stop("Required argument 'destFile' missing.")
+      if (private$cachedResponseFile == "" || !file.exists(private$cachedResponseFile))
+        stop("Response file missing. No query has been made?")
+      file.copy(private$cachedResponseFile, destFile)
+      return(invisible(self))
+    },
+    
+    loadGMLFile = function(fromFile) {
+      "Loads saved GML file into the object for parsing."
+      if (missing(fromFile))
+        stop("Required argument 'fromFile' missing.")
+      if (!file.exists(fromFile))
+        stop("File does not exist.")
+      private$cachedResponseFile <<- fromFile
+      return(invisible(self))
+    },
+   
     listLayers = function(request) {
       if (!missing(request)) {
         success <- private$cacheResponse(dataSourceURL=request$getURL())
         if (is.character(success)) return(character(0))
       }
       else {
-        if (cachedResponseFile == "")
+        if (private$cachedResponseFile == "")
           stop("Specify 'request' argument or load file with 'loadGLMFile'.")
       }
       layers <- private$.listLayers(dataSource=private$cachedResponseFile)
@@ -281,7 +280,7 @@ WFSFileClient <- R6::R6Class(
         if (!is.null(parameters$explodeCollections) && parameters$explodeCollections)
           ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
         if (ogr2ogrParams != "")
-          sourceFile <- convert(layer=layer, parameters=ogr2ogrParams)
+          sourceFile <- private$convert(layer=layer, parameters=ogr2ogrParams)
       }
       response <- private$.getLayer(dataSource=sourceFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
       return(response)
