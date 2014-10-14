@@ -23,52 +23,53 @@
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSRequest
 #' @export WFSRequest
-WFSRequest <- setRefClass(
+WFSRequest <- R6Class(
   "WFSRequest",
-  fields = list(
+  private = list(
     path = "list",
     parameters = "list"
   ),
-  methods = list(
+  public = list(
     setPath = function(path) {
       "Sets WFS request URL path."
-      path <<- path
-      return(invisible(.self))
+      private$path <- path
+      return(invisible(self))
     },
     
     setParameters = function(...) {
       "Sets WFS request URL parameters."
-      parameters <<- list(...)
-      return(invisible(.self))
+      private$parameters <- list(...)
+      return(invisible(self))
     },
     
     getPathString = function() {
       "Returns WFS request URL path as a string."
-      if (length(path) == 0) return("")
-      p <- paste(path, collapse="/")
+      if (length(private$path) == 0) return("")
+      p <- paste(private$path, collapse="/")
       return(p)
     },
     
     getParametersString = function() {
       "Returns WFS request URL parameters as a string."
-      if (length(parameters) == 0) return("")
-      x <- lapply(seq_along(parameters), function(i) paste(names(parameters)[[i]], parameters[[i]], sep="="))
+      if (length(private$parameters) == 0) return("")
+      x <- lapply(seq_along(private$parameters),
+                  function(i) paste(names(private$parameters)[[i]], private$parameters[[i]], sep="="))
       p <- paste(x, collapse="&")
       return(p)
     },
     
     getURL = function() {
       "Returns WFS request URL."
-      stop("Unimplemented method.")
+      stop("Must be implemented by subclass.", call.=FALSE)
     },
     
     getStreamURL = function() {
-      return(paste0("WFS:", getURL()))
+      return(paste0("WFS:", self$getURL()))
     },
     
-    show = function() {
-      cat(getURL(), "\n")
-      return(invisible(.self))
+    print = function(...) {
+      cat(self$getURL(), "\n")
+      return(invisible(self))
     }
   )
 )

@@ -18,16 +18,16 @@
 #' 
 #' @aliases getRasterURL importRaster
 #'
-#' @import methods
+#' @import R6
 #' @import sp
 #' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSClient
 #' @export WFSClient
-WFSClient <- setRefClass(
+WFSClient <- R6::R6Class(
   "WFSClient",
-  methods = list(
-    .private.listLayers = function(dataSource) {
+  private = list(
+    .listLayers = function(dataSource) {
       if (missing(dataSource))
         stop("Required argument 'dataSource' missing.")
       if (!inherits(dataSource, "character"))
@@ -47,7 +47,7 @@ WFSClient <- setRefClass(
       return(layers)
     },
     
-    .private.getLayer = function(dataSource, layer, crs=NULL, swapAxisOrder=FALSE) {
+    .getLayer = function(dataSource, layer, crs=NULL, swapAxisOrder=FALSE) {
       if (missing(dataSource))
         stop("Required argument 'dataSource' missing.")
       if (missing(layer))
@@ -74,8 +74,9 @@ WFSClient <- setRefClass(
       }
       
       return(response)
-    },
-    
+    }
+  ),
+  public = list(
     listLayers = function(request) {
       "Lists data layers from a WFS query."
       stop("Unimplemented method.")
@@ -99,7 +100,7 @@ WFSClient <- setRefClass(
     
     getRaster = function(request, parameters) {
       "Returns raster from WFS query."
-      rasterURL <- getRasterURL(request=request, parameters=parameters)
+      rasterURL <- self$getRasterURL(request=request, parameters=parameters)
       if (length(rasterURL) == 0) return(character())
       
       destFile <- tempfile()
@@ -109,7 +110,7 @@ WFSClient <- setRefClass(
         return(character())
       }
       
-      raster <- importRaster(destFile)
+      raster <- self$importRaster(destFile)
       return(raster)
     }
   )
@@ -123,15 +124,15 @@ WFSClient <- setRefClass(
 #'
 #' @seealso \code{\link{WFSRequest}}, \code{\link{WFSFileClient}}
 #'
-#' @import methods
+#' @import R6
 #' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSStreamClient
 #' @export WFSStreamClient
-WFSStreamClient <- setRefClass(
+WFSStreamClient <- R6::R6Class(
   "WFSStreamClient",
-  contains = "WFSClient",
-  methods = list(
+  inherit = WFSClient,
+  public = list(
     listLayers = function(request) {
       if (missing(request))
         stop("Required argument 'request' missing.")
@@ -139,7 +140,7 @@ WFSStreamClient <- setRefClass(
         stop("Argument 'request' must be a descendant of class 'WFSRequest'.")
       
       dataSourceURL <- request$getStreamURL()
-      layers <- .private.listLayers(dataSource=dataSourceURL)
+      layers <- private$.listLayers(dataSource=dataSourceURL)
       return(layers)
     },
     
@@ -152,7 +153,7 @@ WFSStreamClient <- setRefClass(
         stop("Argument 'request' must be a descendant of class 'WFSRequest'.")
       
       dataSourceURL <- request$getStreamURL()
-      response <- .private.getLayer(dataSource=dataSourceURL, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
+      response <- private$.getLayer(dataSource=dataSourceURL, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
       return(response)
     }
   )
@@ -166,35 +167,54 @@ WFSStreamClient <- setRefClass(
 #'
 #' @seealso \code{\link{WFSRequest}}, \code{\link{WFSStreamClient}}
 #'
-#' @import methods
+#' @import R6
 #' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSFileClient
 #' @export WFSFileClient
-WFSFileClient <- setRefClass(
+WFSFileClient <- R6::R6Class(
   "WFSFileClient",
-  contains = "WFSClient",
-  fields = list(
+  inherit = WFSClient,
+  private = list(
     tempDir = "character",
     cachedDataSourceURL = "character",
-    cachedResponseFile = "character"
+    cachedResponseFile = "character",
+    
+    cacheResponse = function(dataSourceURL) {
+      if (missing(dataSourceURL))
+        stop("Required argument 'dataSourceURL' missing.")
+      if (!inherits(dataSourceURL, "character"))
+        stop("Argument 'dataSourceURL' must be a descendant of class 'dataSourceURL'.")
+      
+      if (private$cachedDataSourceURL != dataSourceURL) {
+        private$cachedDataSourceURL <<- dataSourceURL
+        private$cachedResponseFile <<- tempfile(tmpdir=private$tempDir)
+        success <- download.file(dataSourceURL, private$cachedResponseFile, "internal")
+        message("Response cached to ", private$cachedResponseFile)
+        if (success != 0) {
+          warning("Query failed.")
+          return(character(0))
+        }
+      }
+      return(invisible(self))
+    }    
   ),
-  methods = list(
+  public = list(
     initialize = function(tempDir=tempdir(), ...) {
       callSuper(...)
-      tempDir <<- tempDir
-      cachedDataSourceURL <<- ""
-      cachedResponseFile <<- ""
+      private$tempDir <- tempDir
+      private$cachedDataSourceURL <- ""
+      private$cachedResponseFile <- ""
     },
     
     saveGMLFile = function(destFile) {
       "Saves cached response to a file in GML format."
       if (missing(destFile))
         stop("Required argument 'destFile' missing.")
-      if (length(cachedResponseFile) == 0 || !file.exists(cachedResponseFile))
+      if (length(private$cachedResponseFile) == 0 || !file.exists(private$cachedResponseFile))
         stop("Response file missing. No query has been made?")
-      file.copy(cachedResponseFile, destFile)
-      return(invisible(.self))
+      file.copy(private$cachedResponseFile, destFile)
+      return(invisible(self))
     },
     
     loadGMLFile = function(fromFile) {
@@ -203,30 +223,11 @@ WFSFileClient <- setRefClass(
         stop("Required argument 'fromFile' missing.")
       if (!file.exists(fromFile))
         stop("File does not exist.")
-      cachedResponseFile <<- fromFile
-      return(invisible(.self))
+      private$cachedResponseFile <<- fromFile
+      return(invisible(self))
     },
-    
-    cacheResponse = function(dataSourceURL) {
-      if (missing(dataSourceURL))
-        stop("Required argument 'dataSourceURL' missing.")
-      if (!inherits(dataSourceURL, "character"))
-        stop("Argument 'dataSourceURL' must be a descendant of class 'dataSourceURL'.")
-      
-      if (cachedDataSourceURL != dataSourceURL) {
-        cachedDataSourceURL <<- dataSourceURL
-        cachedResponseFile <<- tempfile(tmpdir=tempDir)
-        success <- download.file(dataSourceURL, cachedResponseFile, "internal")
-        message("Response cached to ", cachedResponseFile)
-        if (success != 0) {
-          warning("Query failed.")
-          return(character(0))
-        }
-      }
-      return(invisible(.self))
-    },
-    
-    convert = function(sourceFile=cachedResponseFile, layer, parameters) {
+        
+    convert = function(sourceFile=private$cachedResponseFile, layer, parameters) {
       destFile <- tempfile()
       
       # QUICKFIX: I don't know why ogr2ogr fails to convert the original file (under Linux at least),
@@ -242,36 +243,36 @@ WFSFileClient <- setRefClass(
         stop("Conversion failed.")
       }
       
-      #unlink(cachedResponseFile)
-      #cachedResponseFile <<- destFile
+      #unlink(private$cachedResponseFile)
+      #private$cachedResponseFile <<- destFile
       return(destFile)
-      #return(invisible(.self))
+      #return(invisible(self))
     },
     
     listLayers = function(request) {
       if (!missing(request)) {
-        success <- cacheResponse(dataSourceURL=request$getURL())
+        success <- private$cacheResponse(dataSourceURL=request$getURL())
         if (is.character(success)) return(character(0))
       }
       else {
         if (cachedResponseFile == "")
           stop("Specify 'request' argument or load file with 'loadGLMFile'.")
       }
-      layers <- .private.listLayers(dataSource=cachedResponseFile)
+      layers <- private$.listLayers(dataSource=private$cachedResponseFile)
       return(layers)
     },
     
     getLayer = function(request, layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
       if (!missing(request)) {
-        success <- cacheResponse(dataSourceURL=request$getURL())
+        success <- private$cacheResponse(dataSourceURL=request$getURL())
         if (is.character(success)) return(character(0))
       }
       else {
-        if (cachedResponseFile == "")
+        if (private$cachedResponseFile == "")
           stop("Specify 'request' argument or load file with 'loadGLMFile'.")        
       }
       
-      sourceFile <- cachedResponseFile
+      sourceFile <- private$cachedResponseFile
       if (!missing(parameters)) {
         ogr2ogrParams <- ""
         # -splitlistfields not needed for rgdal >= 0.9.1
@@ -282,7 +283,7 @@ WFSFileClient <- setRefClass(
         if (ogr2ogrParams != "")
           sourceFile <- convert(layer=layer, parameters=ogr2ogrParams)
       }
-      response <- .private.getLayer(dataSource=sourceFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
+      response <- private$.getLayer(dataSource=sourceFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
       return(response)
     }
   )

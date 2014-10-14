@@ -8,9 +8,9 @@ Maintainer: Jussi Jousimo <jvj@iki.fi>
 Description: WFS client for R
 License: BSD_2_clause + file LICENSE
 Depends:
-    R (>= 3.0.1)
+    R (>= 3.0.1),
+    R6
 Imports:
-    methods,
     sp,
     rgdal
 Suggests:
