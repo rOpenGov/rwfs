@@ -12,64 +12,127 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' @title An abstract class to build WFS request URL's
-#'
-#' @description This class should be inherited and the abstract method \code{getURL} overloaded to provide WFS request URL's.
-#'
-#' @seealso \code{\link{WFSStreamClient}}, \code{\link{WFSFileClient}}
-#' @aliases getURL
-#'
-#' @import methods
+#' @title An abstract class for referencing a WFS or a GML document
+#' @description This class should be inherited and the abstract method \code{getDataSource} overloaded
+#' in a subclass to provide a reference.
+#' @seealso \code{\link{WFSClient}}, \code{\link{GMLFile}}
+#' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSRequest
 #' @export WFSRequest
-WFSRequest <- R6Class(
+WFSRequest <- R6::R6Class(
   "WFSRequest",
-  private = list(
-    path = "list",
-    parameters = "list"
-  ),
   public = list(
-    setPath = function(path) {
-      "Sets WFS request URL path."
-      private$path <- path
-      return(invisible(self))
+    getDataSource = function() {
+      stop("Must be implemented by subclass.", call.=FALSE)
     },
     
-    setParameters = function(...) {
-      "Sets WFS request URL parameters."
-      private$parameters <- list(...)
+    print = function(...) {
+      cat(self$getDataSource(), "\n")
       return(invisible(self))
-    },
+    }
+  )
+)
+
+#' @title An abstract class for building a URL reference to a WFS
+#' @import R6
+#' @author Jussi Jousimo \email{jvj@@iki.fi}
+#' @exportClass WFSStreamingRequest
+#' @export WFSStreamingRequest
+WFSStreamingRequest <- R6::R6Class(
+  "WFSStreamingRequest",
+  inherit = WFSRequest,
+  private = list(
+    path = NA,
+    parameters = NA,
     
     getPathString = function() {
-      "Returns WFS request URL path as a string."
       if (length(private$path) == 0) return("")
       p <- paste(private$path, collapse="/")
       return(p)
     },
     
     getParametersString = function() {
-      "Returns WFS request URL parameters as a string."
-      if (length(private$parameters) == 0) return("")
+      private$parameters[sapply(private$parameters, is.null)] <- NULL
+      if (is.null(private$parameters) | length(private$parameters) == 0) return("")
       x <- lapply(seq_along(private$parameters),
                   function(i) paste(names(private$parameters)[[i]], private$parameters[[i]], sep="="))
       p <- paste(x, collapse="&")
       return(p)
+    }
+    
+    #getStreamURL = function() {
+    #  return(paste0("WFS:", self$getURL()))
+    #},
+    
+  ),
+  public = list(
+    setPath = function(path) {
+      private$path <- path
+      return(invisible(self))
     },
     
+    setParameters = function(...) {
+      private$parameters <- list(...)
+      return(invisible(self))
+    }
+  )
+)
+
+#' @title An abstract class for building a URL reference to a WFS with a caching
+#' @description The abstract method \code{getURL} must be overloaded in a subclass to provide a request URL to a WFS service.
+#' @import R6
+#' @author Jussi Jousimo \email{jvj@@iki.fi}
+#' @exportClass WFSCachingRequest
+#' @export WFSCachingRequest
+WFSCachingRequest <- R6::R6Class(
+  "WFSCachingRequest",
+  inherit = WFSStreamingRequest,
+  private = list(
     getURL = function() {
-      "Returns WFS request URL."
       stop("Must be implemented by subclass.", call.=FALSE)
-    },
-    
-    getStreamURL = function() {
-      return(paste0("WFS:", self$getURL()))
+    }
+  ),
+  public = list(
+    getDataSource = function() {
+      destFile <- tempfile()
+      success <- download.file(private$getURL(), destFile, "internal")
+      if (success != 0) {
+        warning("Query failed.")
+        return(character(0))
+      }
+      return(destFile)      
     },
     
     print = function(...) {
-      cat(self$getURL(), "\n")
+      cat(private$getURL(), "\n")
       return(invisible(self))
+    }
+  )
+)
+
+#' @title A class for providing a file name reference to a GML document
+#' @import R6
+#' @author Jussi Jousimo \email{jvj@@iki.fi}
+#' @exportClass GMLFile
+#' @export GMLFile
+GMLFile <- R6::R6Class(
+  "GMLFile",
+  inherit = WFSRequest,
+  private = list(
+    srcFile = NULL        
+  ),
+  public = list(
+    initialize = function(srcFile) {
+      if (missing(srcFile))
+        stop("Required argument 'srcFile' missing.")
+      if (!file.exists(srcFile))
+        stop(paste0("File '", srcFile, "' does not exist."))
+      private$srcFile <- srcFile
+    },
+    
+    getDataSource = function() {
+      return(private$srcFile)
     }
   )
 )

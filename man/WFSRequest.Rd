@@ -2,22 +2,22 @@
 \docType{data}
 \name{WFSRequest}
 \alias{WFSRequest}
-\alias{getURL}
-\title{An abstract class to build WFS request URL's}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x44dc688> 
+\title{An abstract class for referencing a WFS or a GML document}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x442ecb8> 
  - attr(*, "name")= chr "WFSRequest_generator"
 }}
 \usage{
 WFSRequest
 }
 \description{
-This class should be inherited and the abstract method \code{getURL} overloaded to provide WFS request URL's.
+This class should be inherited and the abstract method \code{getDataSource} overloaded
+in a subclass to provide a reference.
 }
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
 }
 \seealso{
-\code{\link{WFSStreamClient}}, \code{\link{WFSFileClient}}
+\code{\link{WFSClient}}, \code{\link{GMLFile}}
 }
 \keyword{datasets}
 

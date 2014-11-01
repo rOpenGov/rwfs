@@ -12,14 +12,9 @@ Depends:
     R6
 Imports:
     sp,
-    rgdal
+    rgdal,
+    digest
 Suggests:
     raster
 URL: https://github.com/ropengov/rwfs
 LazyLoad: yes
-Collate:
-    'WFSRequest.R'
-    'WFSClient.R'
-    'common.R'
-    'firstlib.R'
-    'pkgname.R'

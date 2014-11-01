@@ -12,12 +12,13 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' @include WFSRequest.R
-
-#' @title WFS client abstract reference class
-#' 
-#' @aliases getRasterURL importRaster
-#'
+#' @title WFS client abstract class
+#' @section Methods:
+#' \itemize{
+#'  \item \code{getDailyWeather}: Returns daily weather time-seris
+#'  \item \code{getMonthlyWeatherRaster}: Returns daily weather raster
+#' }
+#' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, \code{\link{WFSRequest}}
 #' @import R6
 #' @import sp
 #' @import rgdal
@@ -27,6 +28,8 @@
 WFSClient <- R6::R6Class(
   "WFSClient",
   private = list(
+    request = NULL,
+    
     .listLayers = function(dataSource) {
       if (missing(dataSource))
         stop("Required argument 'dataSource' missing.")
@@ -74,33 +77,42 @@ WFSClient <- R6::R6Class(
       }
       
       return(response)
-    }
-  ),
-  public = list(
-    listLayers = function(request) {
-      "Lists data layers from a WFS query."
-      stop("Unimplemented method.")
     },
     
-    getLayer = function(request, layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
-      "Returns layer data from a WFS query."
-      stop("Unimplemented method.")
-    },
-
-    getRasterURL = function(request, parameters) {
-      "Returns raster URL from a WFS query response."
-      stop("Unimplemented method.")
+    getRasterURL = function(parameters) {
+      stop("Unimplemented method.", call.=FALSE)
     },
     
     importRaster = function(destFile) {
-      "Imports raster from downloaded file."
       raster <- raster::brick(destFile)
       return(raster)
+    }
+  ),
+  public = list(
+    initialize = function(request) {
+      self$setRequest(request=request)
+      return(invisible(self))
     },
     
-    getRaster = function(request, parameters) {
-      "Returns raster from WFS query."
-      rasterURL <- self$getRasterURL(request=request, parameters=parameters)
+    setRequest = function(request) {
+      if (missing(request))
+        stop("Required argument 'request' missing.")
+      if (!inherits(request, "WFSRequest"))
+        stop("Argument 'request' must be a descedant of class 'WFSRequest'")
+      private$request <- request
+      return(invisible(self))
+    },
+    
+    listLayers = function() {
+      stop("Unimplemented method.", call.=FALSE)
+    },
+    
+    getLayer = function(layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
+      stop("Unimplemented method.")
+    },
+    
+    getRaster = function(parameters) {
+      rasterURL <- private$getRasterURL(parameters=parameters)
       if (length(rasterURL) == 0) return(character())
       
       destFile <- tempfile()
@@ -110,124 +122,67 @@ WFSClient <- R6::R6Class(
         return(character())
       }
       
-      raster <- self$importRaster(destFile)
+      raster <- private$importRaster(destFile)
       return(raster)
     }
   )
 )
 
 #' @title Streams response from a WFS
-#' 
-#' @description Dispatches WFS request and parses response from the stream. Provides a caching mechanism
-#' for the same subsequent queries. The absract method \code{\link{getRasterURL}} should be overloaded for
-#' raster queries and possibly \code{\link{importRaster}} as well.
-#'
-#' @seealso \code{\link{WFSRequest}}, \code{\link{WFSFileClient}}
-#'
+#' @description Dispatches a WFS request and parses response from the stream directly.
+#' @seealso \code{\link{WFSRequest}}, \code{\link{WFSCachingClient}}
 #' @import R6
 #' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSStreamClient
-#' @export WFSStreamClient
-WFSStreamClient <- R6::R6Class(
+#' @exportClass WFSStreamingClient
+#' @export WFSStreamingClient
+WFSStreamingClient <- R6::R6Class(
   "WFSStreamClient",
   inherit = WFSClient,
   public = list(
-    listLayers = function(request) {
-      if (missing(request))
-        stop("Required argument 'request' missing.")
-      if (!inherits(request, "WFSRequest"))
-        stop("Argument 'request' must be a descendant of class 'WFSRequest'.")
-      
-      dataSourceURL <- request$getStreamURL()
-      layers <- private$.listLayers(dataSource=dataSourceURL)
+    listLayers = function() {
+      layers <- private$.listLayers(dataSource=private$request$getDataSource())
       return(layers)
     },
     
-    getLayer = function(request, layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
-      if (missing(request))
-        stop("Required argument 'request' missing.")
+    getLayer = function(layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
       if (missing(layer))
         stop("Required argument 'layer' missing.")
-      if (!inherits(request, "WFSRequest"))
-        stop("Argument 'request' must be a descendant of class 'WFSRequest'.")
       
-      dataSourceURL <- request$getStreamURL()
-      response <- private$.getLayer(dataSource=dataSourceURL, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
+      response <- private$.getLayer(dataSource=private$request$getDataSource(), layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
       return(response)
     }
   )
 )
 
-#' @title Reads response from a file instead of a WFS service directly
-#' 
-#' @description Dispatches WFS request, saves response to a file and parses the file.
-#' The absract method \code{\link{getRasterURL}} should be overloaded for raster queries and possibly
-#' \code{\link{importRaster}} as well.
-#'
-#' @seealso \code{\link{WFSRequest}}, \code{\link{WFSStreamClient}}
-#'
+#' @title Downloads response from a WFS and parses the intermediate file
+#' @description Dispatches a WFS request, saves the response to a file and parses the file. The data can be converted
+#' using ogr2ogr of RGDAL. Provides a caching mechanism for subsequent queries on the same data.
+#' @seealso \code{\link{WFSRequest}}, \code{\link{WFSStreamingClient}}
 #' @import R6
 #' @import rgdal
+#' @import digest
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSFileClient
-#' @export WFSFileClient
-WFSFileClient <- R6::R6Class(
-  "WFSFileClient",
+#' @exportClass WFSCachingClient
+#' @export WFSCachingClient
+WFSCachingClient <- R6::R6Class(
+  "WFSCachingClient",
   inherit = WFSClient,
   private = list(
-    tempDir = NA,
-    cachedDataSourceURL = "",
-    cachedResponseFile = "",
+    cachedResponseFile = NULL,
+    requestHash = NULL, # Save the hash of the request object to detect changed request
     
-    cacheResponse = function(dataSourceURL) {
-      if (missing(dataSourceURL))
-        stop("Required argument 'dataSourceURL' missing.")
-      if (!inherits(dataSourceURL, "character"))
-        stop("Argument 'dataSourceURL' must be a descendant of class 'dataSourceURL'.")
-      
-      if (private$cachedDataSourceURL != dataSourceURL) {
-        private$cachedDataSourceURL <<- dataSourceURL
-        private$cachedResponseFile <<- tempfile(tmpdir=private$tempDir)
-        success <- download.file(dataSourceURL, private$cachedResponseFile, "internal")
-        message("Response cached to ", private$cachedResponseFile)
-        if (success != 0) {
-          warning("Query failed.")
-          return(character(0))
-        }
+    cacheResponse = function() {
+      if (is.null(private$cachedResponseFile) || private$requestHash != digest(private$request)) {
+        destFile <- request$getDataSource()
+        if (length(destFile) == 0) return(character(0))      
+        private$cachedResponseFile <- destFile
+        private$requestHash <- digest(private$request)
       }
       return(invisible(self))
-    },
-    
-    
-    convert = function(sourceFile=private$cachedResponseFile, layer, parameters) {
-      destFile <- tempfile()
-      
-      # QUICKFIX: I don't know why ogr2ogr fails to convert the original file (under Linux at least),
-      # but if it's copied to new location, everything seems to be fine
-      ufoBugFix <- tempfile()
-      file.copy(sourceFile, ufoBugFix)
-      sourceFile <- ufoBugFix
-      
-      cmd <- paste("ogr2ogr -f GML", parameters, destFile, sourceFile, layer)
-      message(cmd)
-      errorCode <- system(cmd)
-      if (errorCode != 0) {
-        stop("Conversion failed.")
-      }
-      
-      #unlink(private$cachedResponseFile)
-      #private$cachedResponseFile <<- destFile
-      return(destFile)
-      #return(invisible(self))
     }
   ),
   public = list(
-    initialize = function(tempDir=tempdir(), ...) {
-      #super$initialize(...)
-      private$tempDir <- tempDir
-    },
-    
     saveGMLFile = function(destFile) {
       "Saves cached response to a file in GML format."
       if (missing(destFile))
@@ -248,28 +203,14 @@ WFSFileClient <- R6::R6Class(
       return(invisible(self))
     },
    
-    listLayers = function(request) {
-      if (!missing(request)) {
-        success <- private$cacheResponse(dataSourceURL=request$getURL())
-        if (is.character(success)) return(character(0))
-      }
-      else {
-        if (private$cachedResponseFile == "")
-          stop("Specify 'request' argument or load file with 'loadGLMFile'.")
-      }
+    listLayers = function() {
+      if (is.character(private$cacheResponse())) return(character(0))
       layers <- private$.listLayers(dataSource=private$cachedResponseFile)
       return(layers)
     },
     
-    getLayer = function(request, layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
-      if (!missing(request)) {
-        success <- private$cacheResponse(dataSourceURL=request$getURL())
-        if (is.character(success)) return(character(0))
-      }
-      else {
-        if (private$cachedResponseFile == "")
-          stop("Specify 'request' argument or load file with 'loadGLMFile'.")        
-      }
+    getLayer = function(layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
+      if (is.character(private$cacheResponse())) return(character(0))
       
       sourceFile <- private$cachedResponseFile
       if (!missing(parameters)) {
@@ -280,8 +221,9 @@ WFSFileClient <- R6::R6Class(
         if (!is.null(parameters$explodeCollections) && parameters$explodeCollections)
           ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
         if (ogr2ogrParams != "")
-          sourceFile <- private$convert(layer=layer, parameters=ogr2ogrParams)
+          sourceFile <- convertOGR(sourceFile=private$cachedResponseFile, layer=layer, parameters=ogr2ogrParams)
       }
+      
       response <- private$.getLayer(dataSource=sourceFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
       return(response)
     }

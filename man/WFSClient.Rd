@@ -2,20 +2,28 @@
 \docType{data}
 \name{WFSClient}
 \alias{WFSClient}
-\alias{getRasterURL}
-\alias{importRaster}
-\title{WFS client abstract reference class}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x4522f88> 
+\title{WFS client abstract class}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x43d11f8> 
  - attr(*, "name")= chr "WFSClient_generator"
 }}
 \usage{
 WFSClient
 }
 \description{
-WFS client abstract reference class
+WFS client abstract class
+}
+\section{Methods}{
+
+\itemize{
+ \item \code{getDailyWeather}: Returns daily weather time-seris
+ \item \code{getMonthlyWeatherRaster}: Returns daily weather raster
+}
 }
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
+}
+\seealso{
+\code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, \code{\link{WFSRequest}}
 }
 \keyword{datasets}
 
