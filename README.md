@@ -23,3 +23,8 @@ Please read the package documentation for instructions.
   * compose a friendly e-mail to: [jvj@iki.fi](mailto:jvj@iki.fi)
   * join IRC at !louhos@IRCnet (Finland) and ropengov@Freenode (international)
   * follow us in social media: Louhos (Finland); rOpenGov (international)
+
+### Acknowledgements
+
+  Roger Bivand for helping with the rgdal package.
+  
