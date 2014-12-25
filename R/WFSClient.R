@@ -174,7 +174,7 @@ WFSCachingClient <- R6::R6Class(
     
     cacheResponse = function() {
       if (is.null(private$cachedResponseFile) || private$requestHash != digest(private$request)) {
-        destFile <- request$getDataSource()
+        destFile <- private$request$getDataSource()
         if (length(destFile) == 0) return(character(0))      
         private$cachedResponseFile <- destFile
         private$requestHash <- digest(private$request)
