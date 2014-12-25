@@ -1,7 +1,7 @@
 Package: rwfs
 Type: Package
 Title: WFS client for R
-Version: 0.1.11
+Version: 0.1.12
 Date: 2014-10-10
 Author: Jussi Jousimo
 Maintainer: Jussi Jousimo <jvj@iki.fi>
