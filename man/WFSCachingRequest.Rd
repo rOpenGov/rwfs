@@ -3,7 +3,7 @@
 \name{WFSCachingRequest}
 \alias{WFSCachingRequest}
 \title{An abstract class for building a URL reference to a WFS with a caching}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x44566b0> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x44ef010> 
  - attr(*, "name")= chr "WFSCachingRequest_generator"
 }}
 \usage{

@@ -3,7 +3,7 @@
 \name{WFSStreamingRequest}
 \alias{WFSStreamingRequest}
 \title{An abstract class for building a URL reference to a WFS}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x44429d0> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x44dc270> 
  - attr(*, "name")= chr "WFSStreamingRequest_generator"
 }}
 \usage{

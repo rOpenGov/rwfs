@@ -3,7 +3,7 @@
 \name{WFSCachingClient}
 \alias{WFSCachingClient}
 \title{Downloads response from a WFS and parses the intermediate file}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x43fd8f0> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x448c418> 
  - attr(*, "name")= chr "WFSCachingClient_generator"
 }}
 \usage{

@@ -3,7 +3,7 @@
 \name{WFSClient}
 \alias{WFSClient}
 \title{WFS client abstract class}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x43d11f8> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x4453918> 
  - attr(*, "name")= chr "WFSClient_generator"
 }}
 \usage{

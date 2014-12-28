@@ -3,7 +3,7 @@
 \name{WFSRequest}
 \alias{WFSRequest}
 \title{An abstract class for referencing a WFS or a GML document}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x442ecb8> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x44c84e0> 
  - attr(*, "name")= chr "WFSRequest_generator"
 }}
 \usage{

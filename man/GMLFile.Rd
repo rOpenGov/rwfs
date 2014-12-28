@@ -3,7 +3,7 @@
 \name{GMLFile}
 \alias{GMLFile}
 \title{A class for providing a file name reference to a GML document}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x4468a58> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x4502b20> 
  - attr(*, "name")= chr "GMLFile_generator"
 }}
 \usage{

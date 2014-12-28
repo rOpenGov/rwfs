@@ -3,7 +3,7 @@
 \name{WFSStreamingClient}
 \alias{WFSStreamingClient}
 \title{Streams response from a WFS}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x43e9c48> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x4478ef0> 
  - attr(*, "name")= chr "WFSStreamClient_generator"
 }}
 \usage{

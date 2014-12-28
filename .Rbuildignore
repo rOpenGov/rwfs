@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-  
+inst/extras/.RData
+
 # Travis scripts
 .travis.yml
 
