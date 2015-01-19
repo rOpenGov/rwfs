@@ -43,11 +43,11 @@ WFSStreamingRequest <- R6::R6Class(
   "WFSStreamingRequest",
   inherit = WFSRequest,
   private = list(
-    path = NA,
-    parameters = NA,
+    path = NULL,
+    parameters = NULL,
     
     getPathString = function() {
-      if (length(private$path) == 0) return("")
+      if (is.null(private$path) | length(private$path) == 0) return("")
       p <- paste(private$path, collapse="/")
       return(p)
     },
@@ -60,7 +60,7 @@ WFSStreamingRequest <- R6::R6Class(
       p <- paste(x, collapse="&")
       return(p)
     }
-    
+        
     #getStreamURL = function() {
     #  return(paste0("WFS:", self$getURL()))
     #},
