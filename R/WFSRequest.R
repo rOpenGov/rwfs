@@ -24,7 +24,7 @@ WFSRequest <- R6::R6Class(
   "WFSRequest",
   public = list(
     getDataSource = function() {
-      stop("Must be implemented by subclass.", call.=FALSE)
+      stop("getDataSource() must be implemented by the subclass.", call.=FALSE)
     },
     
     print = function(...) {
@@ -90,7 +90,7 @@ WFSCachingRequest <- R6::R6Class(
   inherit = WFSStreamingRequest,
   private = list(
     getURL = function() {
-      stop("Must be implemented by subclass.", call.=FALSE)
+      stop("getURL() must be implemented by the subclass.", call.=FALSE)
     }
   ),
   public = list(
