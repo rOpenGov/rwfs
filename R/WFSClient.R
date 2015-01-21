@@ -13,12 +13,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #' @title WFS client abstract class
-#' @section Methods:
-#' \itemize{
-#'  \item \code{getDailyWeather}: Returns daily weather time-seris
-#'  \item \code{getMonthlyWeatherRaster}: Returns daily weather raster
-#' }
 #' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, \code{\link{WFSRequest}}
+#' @usage NULL
+#' @format NULL
 #' @import R6
 #' @import sp
 #' @import rgdal
@@ -131,6 +128,8 @@ WFSClient <- R6::R6Class(
 #' @title Streams response from a WFS
 #' @description Dispatches a WFS request and parses response from the stream directly.
 #' @seealso \code{\link{WFSRequest}}, \code{\link{WFSCachingClient}}
+#' @usage NULL
+#' @format NULL
 #' @import R6
 #' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
@@ -159,6 +158,8 @@ WFSStreamingClient <- R6::R6Class(
 #' @description Dispatches a WFS request, saves the response to a file and parses the file. The data can be converted
 #' using ogr2ogr of RGDAL. Provides a caching mechanism for subsequent queries on the same data.
 #' @seealso \code{\link{WFSRequest}}, \code{\link{WFSStreamingClient}}
+#' @usage NULL
+#' @format NULL
 #' @import R6
 #' @import rgdal
 #' @import digest
