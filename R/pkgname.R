@@ -4,26 +4,10 @@
 #'
 #' The client relies on the GDAL (\url{http://www.gdal.org/}) library and the \pkg{rgdal}
 #' (\url{http://cran.r-project.org/web/packages/rgdal/index.html}) package, which should be installed first.
-#' 
-#' The package provides the following reference classes:
-#' \itemize{
-#'   \item \code{\link{WFSRequest}} builds a WFS request URL's.
-#'   \item \code{\link{WFSStreamClient}} dispatches the request and parses response from stream.
-#'   \item \code{\link{WFSFileClient}} dispatches the request, downloads response and parses from file.
-#' }
-#' 
-#' At minimum, the \code{WFSRequest} abstract class should be inherited and the abstract method \code{\link{getURL}} overloaded
-#' to provide request URL's to the WFS. For grid data, the method \code{\link{getRasterURL}} should be overloaded
-#' and possibly \code{\link{importRaster}} as well in \code{WFSStreamClient} and/or \code{WFSFileClient} as well.
-#' 
-#' Due to the design of R, reference classes in other packages cannot be inherited directly.
-#' However, the generator objects can be imported to your environment using \code{\link{getFromNamespace}}, for example:
-#' 
-#' \code{WFSRequest <- getFromNamespace("WFSRequest", "rwfs")}
-#' 
-#' For package development, the \pkg{rwfs} library should be specified in \code{Depends} section in \code{DESCRIPTION} file.
-#' 
-#' See examples in the \pkg{fmi} package (\url{http://www.github.com/rOpenGov/fmi}).
+#'  
+#' See examples in the \pkg{fmi} (\url{http://www.github.com/rOpenGov/fmi}) and the \pkg{gisfin} packages
+#' (\url{http://www.github.com/rOpenGov/gisfin}) how to inherit the abstract R6 classes
+#' (\url{http://cran.r-project.org/web/packages/R6/}) provided by the package.
 #' 
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @docType package
