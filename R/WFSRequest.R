@@ -16,6 +16,8 @@
 #' @description This class should be inherited and the abstract method \code{getDataSource} overloaded
 #' in a subclass to provide a reference.
 #' @seealso \code{\link{WFSClient}}, \code{\link{GMLFile}}
+#' @usage NULL
+#' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSRequest
@@ -36,6 +38,8 @@ WFSRequest <- R6::R6Class(
 
 #' @title An abstract class for building a URL reference to a WFS
 #' @import R6
+#' @usage NULL
+#' @format NULL
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSStreamingRequest
 #' @export WFSStreamingRequest
@@ -75,12 +79,28 @@ WFSStreamingRequest <- R6::R6Class(
     setParameters = function(...) {
       private$parameters <- list(...)
       return(invisible(self))
+    },
+    
+    # Operations supported for WFS 1.0.0, see more info:
+    # http://docs.geoserver.org/stable/en/user/services/wfs/reference.html
+    
+    getCapabilities = function(version="1.0.0", ...) {
+      self$setParameters(service="WFS", version=version, request="GetCapabilities", ...)
+      return(invisible(self))
+    },
+    
+    getFeature = function(version="1.0.0", typeName, ...) {
+      if (missing(typeName))
+        stop("Argument 'typeName' missing.")
+      self$setParameters(service="WFS", version=version, request="GetFeature", typeName=typeName, ...)
     }
   )
 )
 
 #' @title An abstract class for building a URL reference to a WFS with a caching
 #' @description The abstract method \code{getURL} must be overloaded in a subclass to provide a request URL to a WFS service.
+#' @usage NULL
+#' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSCachingRequest
@@ -112,6 +132,8 @@ WFSCachingRequest <- R6::R6Class(
 )
 
 #' @title A class for providing a file name reference to a GML document
+#' @usage NULL
+#' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass GMLFile
