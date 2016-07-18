@@ -18,3 +18,4 @@ Suggests:
     raster
 URL: https://github.com/ropengov/rwfs
 LazyLoad: yes
+RoxygenNote: 5.0.1
