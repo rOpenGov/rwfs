@@ -28,12 +28,14 @@ WFSClient <- R6::R6Class(
     request = NULL,
     
     .listLayers = function(dataSource) {
-      if (missing(dataSource))
+      if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
-      if (!inherits(dataSource, "character"))
+      }
+      if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
-      
-      layers <- try(rgdal::ogrListLayers(dsn=dataSource)) 
+      }
+        
+      layers <- try(rgdal::ogrListLayers(dsn = dataSource)) 
       if (inherits(layers, "try-error")) {
         if (length(grep("Cannot open data source", layers)) == 1) {
           # GDAL < 1.11.0 returns "Cannot open data source" for connection problems and zero layer responses
@@ -47,22 +49,27 @@ WFSClient <- R6::R6Class(
       return(layers)
     },
     
-    .getLayer = function(dataSource, layer, crs=NULL, swapAxisOrder=FALSE) {
-      if (missing(dataSource))
+    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE) {
+      if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
-      if (missing(layer))
+        }
+      if (missing(layer)) {
         stop("Required argument 'layer' missing.")
-      if (!inherits(dataSource, "character"))
+      }
+      if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
+      }
 
-      #response <- try(rgdal::readOGR(dsn=dataSource, layer=layer, p4s=crs, swapAxisOrder=swapAxisOrder, stringsAsFactors=FALSE)) # Works only in rgdal >= 0.9
-      response <- try(rgdal::readOGR(dsn=dataSource, layer=layer, p4s=crs, stringsAsFactors=FALSE))
+      response <- try(rgdal::readOGR(dsn = dataSource, layer = layer, p4s = crs, 
+                                     stringsAsFactors = FALSE))
       if (inherits(response, "try-error")) {
         if (length(grep("Cannot open data source", response)) == 1) {
           warning("Unable to connect to the data source or error in query result.")
           return(character(0))
         }
-        else stop("Fatal error.")
+        else {
+          stop("Fatal error.")
+        }
       }
       
       # Hack and will be removed once rgdal 0.9 becomes available in CRAN
@@ -77,7 +84,7 @@ WFSClient <- R6::R6Class(
     },
     
     getRasterURL = function(parameters) {
-      stop("Unimplemented method.", call.=FALSE)
+      stop("Unimplemented method.", call. = FALSE)
     },
     
     importRaster = function(destFile) {
@@ -87,33 +94,38 @@ WFSClient <- R6::R6Class(
   ),
   public = list(
     initialize = function(request) {
-      self$setRequest(request=request)
+      self$setRequest(request = request)
       return(invisible(self))
     },
     
     setRequest = function(request) {
-      if (missing(request))
+      if (missing(request)) {
         stop("Required argument 'request' missing.")
-      if (!inherits(request, "WFSRequest"))
+      }
+      if (!inherits(request, "WFSRequest")) {
         stop("Argument 'request' must be a descedant of class 'WFSRequest'")
+      }
       private$request <- request
       return(invisible(self))
     },
     
     listLayers = function() {
-      stop("Unimplemented method.", call.=FALSE)
+      stop("Unimplemented method.", call. = FALSE)
     },
     
-    getLayer = function(layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
+    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
+                        parameters) {
       stop("Unimplemented method.")
     },
     
     getRaster = function(parameters) {
-      rasterURL <- private$getRasterURL(parameters=parameters)
-      if (length(rasterURL) == 0) return(character())
+      rasterURL <- private$getRasterURL(parameters = parameters)
+      if (length(rasterURL) == 0) {
+        return(character())
+      }
       
       destFile <- tempfile()
-      success <- download.file(rasterURL, destfile=destFile)
+      success <- download.file(rasterURL, destfile = destFile)
       if (success != 0) {
         warning("Failed to download raster file.")
         return(character())
@@ -140,15 +152,17 @@ WFSStreamingClient <- R6::R6Class(
   inherit = WFSClient,
   public = list(
     listLayers = function() {
-      layers <- private$.listLayers(dataSource=private$request$getDataSource())
+      layers <- private$.listLayers(dataSource = private$request$getDataSource())
       return(layers)
     },
     
-    getLayer = function(layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
-      if (missing(layer))
+    getLayer = function(layer, crs = NULL, swapAxisOrder= FALSE, parameters) {
+      if (missing(layer)) {
         stop("Required argument 'layer' missing.")
-      
-      response <- private$.getLayer(dataSource=private$request$getDataSource(), layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
+      }
+        
+      response <- private$.getLayer(dataSource = private$request$getDataSource(), 
+                                    layer = layer, crs = crs, swapAxisOrder = swapAxisOrder)
       return(response)
     }
   )
@@ -176,7 +190,9 @@ WFSCachingClient <- R6::R6Class(
     cacheResponse = function() {
       if (is.null(private$cachedResponseFile) || private$requestHash != digest(private$request)) {
         destFile <- private$request$getDataSource()
-        if (length(destFile) == 0) return(character(0))      
+        if (length(destFile) == 0) {
+          return(character(0))
+        }
         private$cachedResponseFile <- destFile
         private$requestHash <- digest(private$request)
       }
@@ -186,46 +202,60 @@ WFSCachingClient <- R6::R6Class(
   public = list(
     saveGMLFile = function(destFile) {
       "Saves cached response to a file in GML format."
-      if (missing(destFile))
+      if (missing(destFile)) {
         stop("Required argument 'destFile' missing.")
-      if (private$cachedResponseFile == "" || !file.exists(private$cachedResponseFile))
+      }
+      if (private$cachedResponseFile == "" || !file.exists(private$cachedResponseFile)) {
         stop("Response file missing. No query has been made?")
+      }
       file.copy(private$cachedResponseFile, destFile)
       return(invisible(self))
     },
     
     loadGMLFile = function(fromFile) {
       "Loads saved GML file into the object for parsing."
-      if (missing(fromFile))
+      if (missing(fromFile)) {
         stop("Required argument 'fromFile' missing.")
-      if (!file.exists(fromFile))
+      }
+      if (!file.exists(fromFile)) {
         stop("File does not exist.")
+      }
+      # FIXME: Woah, what's going on here?
       private$cachedResponseFile <<- fromFile
       return(invisible(self))
     },
    
     listLayers = function() {
-      if (is.character(private$cacheResponse())) return(character(0))
-      layers <- private$.listLayers(dataSource=private$cachedResponseFile)
+      if (is.character(private$cacheResponse())) {
+        return(character(0))
+      }
+      layers <- private$.listLayers(dataSource = private$cachedResponseFile)
       return(layers)
     },
     
-    getLayer = function(layer, crs=NULL, swapAxisOrder=FALSE, parameters) {
-      if (is.character(private$cacheResponse())) return(character(0))
+    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, parameters) {
+      if (is.character(private$cacheResponse())) {
+        return(character(0))
+      }
       
       sourceFile <- private$cachedResponseFile
       if (!missing(parameters)) {
         ogr2ogrParams <- ""
         # -splitlistfields not needed for rgdal >= 0.9.1
-        if (!is.null(parameters$splitListFields) && parameters$splitListFields)
+        if (!is.null(parameters$splitListFields) && parameters$splitListFields) {
           ogr2ogrParams <- paste(ogr2ogrParams, "-splitlistfields")
-        if (!is.null(parameters$explodeCollections) && parameters$explodeCollections)
+        }
+        if (!is.null(parameters$explodeCollections) && parameters$explodeCollections) {
           ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
-        if (ogr2ogrParams != "")
-          sourceFile <- convertOGR(sourceFile=private$cachedResponseFile, layer=layer, parameters=ogr2ogrParams)
+        }
+        if (ogr2ogrParams != "") {
+          sourceFile <- convertOGR(sourceFile = private$cachedResponseFile, 
+                                   layer = layer, parameters = ogr2ogrParams)
+        }
       }
       
-      response <- private$.getLayer(dataSource=sourceFile, layer=layer, crs=crs, swapAxisOrder=swapAxisOrder)
+      response <- private$.getLayer(dataSource = sourceFile, layer = layer, crs = crs, 
+                                    swapAxisOrder = swapAxisOrder)
       return(response)
     }
   )
