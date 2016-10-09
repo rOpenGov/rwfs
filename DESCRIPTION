@@ -15,7 +15,8 @@ Imports:
     rgdal,
     digest
 Suggests:
-    raster
+    raster,
+    testthat
 URL: https://github.com/ropengov/rwfs
 LazyLoad: yes
 RoxygenNote: 5.0.1
