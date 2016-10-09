@@ -84,15 +84,14 @@ WFSStreamingRequest <- R6::R6Class(
     # http://docs.geoserver.org/stable/en/user/services/wfs/reference.html
     
     getCapabilities = function(version="1.0.0", ...) {
-      self$setParameters(service = "WFS", version = version, request = "GetCapabilities", ...)
+      self$setParameters(service = "WFS", version = version, 
+                         request = "GetCapabilities", ...)
       return(invisible(self))
     },
     
-    getFeature = function(version = "1.0.0", typeName, ...) {
-      if (missing(typeName)) {
-        stop("Argument 'typeName' missing.")
-      }
-      self$setParameters(service = "WFS", version = version, request = "GetFeature", typeName = typeName, ...)
+    getFeature = function(version = "1.0.0", typeNames, ...) {
+      self$setParameters(service = "WFS", version = version, 
+                         request = "GetFeature", typeNames = typeNames, ...)
     }
   )
 )
