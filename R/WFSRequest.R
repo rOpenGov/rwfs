@@ -26,7 +26,7 @@ WFSRequest <- R6::R6Class(
   "WFSRequest",
   public = list(
     getDataSource = function() {
-      stop("getDataSource() must be implemented by the subclass.", call.=FALSE)
+      stop("getDataSource() must be implemented by the subclass.", call. = FALSE)
     },
     
     print = function(...) {
@@ -51,24 +51,23 @@ WFSStreamingRequest <- R6::R6Class(
     parameters = NULL,
     
     getPathString = function() {
-      if (is.null(private$path) | length(private$path) == 0) return("")
-      p <- paste(private$path, collapse="/")
+      if (is.null(private$path) | length(private$path) == 0) {
+        return("")
+      }
+      p <- paste(private$path, collapse = "/")
       return(p)
     },
     
     getParametersString = function() {
       private$parameters[sapply(private$parameters, is.null)] <- NULL
-      if (is.null(private$parameters) | length(private$parameters) == 0) return("")
+      if (is.null(private$parameters) | length(private$parameters) == 0) {
+        return("")
+      }
       x <- lapply(seq_along(private$parameters),
-                  function(i) paste(names(private$parameters)[[i]], private$parameters[[i]], sep="="))
-      p <- paste(x, collapse="&")
+                  function(i) {paste(names(private$parameters)[[i]], private$parameters[[i]], sep = "=")})
+      p <- paste(x, collapse = "&")
       return(p)
     }
-        
-    #getStreamURL = function() {
-    #  return(paste0("WFS:", self$getURL()))
-    #},
-    
   ),
   public = list(
     setPath = function(path) {
@@ -85,14 +84,15 @@ WFSStreamingRequest <- R6::R6Class(
     # http://docs.geoserver.org/stable/en/user/services/wfs/reference.html
     
     getCapabilities = function(version="1.0.0", ...) {
-      self$setParameters(service="WFS", version=version, request="GetCapabilities", ...)
+      self$setParameters(service = "WFS", version = version, request = "GetCapabilities", ...)
       return(invisible(self))
     },
     
-    getFeature = function(version="1.0.0", typeName, ...) {
-      if (missing(typeName))
+    getFeature = function(version = "1.0.0", typeName, ...) {
+      if (missing(typeName)) {
         stop("Argument 'typeName' missing.")
-      self$setParameters(service="WFS", version=version, request="GetFeature", typeName=typeName, ...)
+      }
+      self$setParameters(service = "WFS", version = version, request = "GetFeature", typeName = typeName, ...)
     }
   )
 )
@@ -110,7 +110,7 @@ WFSCachingRequest <- R6::R6Class(
   inherit = WFSStreamingRequest,
   private = list(
     getURL = function() {
-      stop("getURL() must be implemented by the subclass.", call.=FALSE)
+      stop("getURL() must be implemented by the subclass.", call. = FALSE)
     }
   ),
   public = list(
@@ -146,10 +146,12 @@ GMLFile <- R6::R6Class(
   ),
   public = list(
     initialize = function(srcFile) {
-      if (missing(srcFile))
+      if (missing(srcFile)) {
         stop("Required argument 'srcFile' missing.")
-      if (!file.exists(srcFile))
+      }
+      if (!file.exists(srcFile)) {
         stop(paste0("File '", srcFile, "' does not exist."))
+      }
       private$srcFile <- srcFile
     },
     
