@@ -83,8 +83,11 @@ WFSStreamingRequest <- R6::R6Class(
       return(invisible(self))
     },
     
-    # Operations supported for WFS 1.0.0, see more info:
+    # Operations supported for WFS 1.0.0, 1.1.0 and 2.0.0 see more info:
     # http://docs.geoserver.org/stable/en/user/services/wfs/reference.html
+    #
+    # Notable differences:
+    #  - "typeNames" is "typeName" in WFS 2.0.0 
     
     getCapabilities = function(version="1.0.0", ...) {
       self$setParameters(service = "WFS", version = version, 
@@ -93,8 +96,13 @@ WFSStreamingRequest <- R6::R6Class(
     },
     
     getFeature = function(version = "1.0.0", typeNames, ...) {
-      self$setParameters(service = "WFS", version = version, 
-                         request = "GetFeature", typeNames = typeNames, ...)
+      if (version == "2.0.0") {
+        self$setParameters(service = "WFS", version = version, 
+                           request = "GetFeature", typeNames = typeNames, ...)
+      } else {
+        self$setParameters(service = "WFS", version = version, 
+                           request = "GetFeature", typeName = typeNames, ...)
+      }
     }
   )
 )
