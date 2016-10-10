@@ -7,7 +7,8 @@ rwfs
 
 WFS client for R
 
-+ Maintainers: [Jussi Jousimo](http://www.github.com/statguy/)
++ Original author: [Jussi Jousimo](http://www.github.com/statguy/)
++ Maintainers: [Joona Lehtomäki](https://github.com/jlehtoma)
 + License: FreeBSD
 
 ### Overview
