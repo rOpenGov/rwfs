@@ -19,7 +19,7 @@ This R package provides a client to access a [Web Feature Service](http://www.op
 
 #### Installation
 
-The `rwfs` package requires `R6`, `rgal` and `raster` (optional) packages. Please refer to the
+The `rwfs` package requires `R6`, `rgdal` and `raster` (optional) packages. Please refer to the
 [gisfin tutorial](https://github.com/rOpenGov/gisfin/blob/master/vignettes/gisfin_tutorial.md) for installation instructions of `rgdal`.
 The package can be installed from github using `devtools`
 ```
