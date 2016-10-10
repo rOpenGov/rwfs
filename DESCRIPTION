@@ -12,7 +12,7 @@ Depends:
     R6
 Imports:
     sp,
-    rgdal (>= 1.1.10),
+    rgdal,
     digest
 Suggests:
     raster,

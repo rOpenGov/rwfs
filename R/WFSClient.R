@@ -48,7 +48,7 @@ WFSClient <- R6::R6Class(
       return(layers)
     },
     
-    .getLayer = function(dataSource, layer, crs = NULL) {
+    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE) {
       if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
         }
@@ -69,6 +69,14 @@ WFSClient <- R6::R6Class(
         else {
           stop("Fatal error.")
         }
+      }
+      
+      # Hack and will be removed once rgdal 0.9 becomes available in CRAN
+      if (swapAxisOrder) {
+        xy <- sp::coordinates(response)
+        response@coords <- xy[,2:1]
+        response@bbox <- response@bbox[2:1,]
+        rownames(response@bbox) <- rownames(response@bbox)[2:1]
       }
       
       return(response)
@@ -104,7 +112,8 @@ WFSClient <- R6::R6Class(
       stop("Unimplemented method.", call. = FALSE)
     },
     
-    getLayer = function(layer, crs = NULL, parameters) {
+    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
+                        parameters) {
       stop("Unimplemented method.")
     },
     
@@ -146,13 +155,13 @@ WFSStreamingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, parameters) {
+    getLayer = function(layer, crs = NULL, swapAxisOrder= FALSE, parameters) {
       if (missing(layer)) {
         stop("Required argument 'layer' missing.")
       }
         
       response <- private$.getLayer(dataSource = private$request$getDataSource(), 
-                                    layer = layer, crs = crs)
+                                    layer = layer, crs = crs, swapAxisOrder = swapAxisOrder)
       return(response)
     }
   )
@@ -225,7 +234,7 @@ WFSCachingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, parameters) {
+    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, parameters) {
       if (is.character(private$cacheResponse())) {
         return(character(0))
       }
@@ -246,7 +255,8 @@ WFSCachingClient <- R6::R6Class(
         }
       }
       
-      response <- private$.getLayer(dataSource = sourceFile, layer = layer, crs = crs)
+      response <- private$.getLayer(dataSource = sourceFile, layer = layer, crs = crs, 
+                                    swapAxisOrder = swapAxisOrder)
       return(response)
     }
   )
