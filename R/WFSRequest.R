@@ -36,7 +36,10 @@ WFSRequest <- R6::R6Class(
   )
 )
 
-#' @title An abstract class for building a URL reference to a WFS
+#' An abstract class for building a URL reference to a WFS
+#' 
+#' An abstract class for building a URL reference to a WFS.
+#' 
 #' @import R6
 #' @usage NULL
 #' @format NULL
@@ -130,7 +133,10 @@ WFSCachingRequest <- R6::R6Class(
   )
 )
 
-#' @title A class for providing a file name reference to a GML document
+#' A class for providing a file name reference to a GML document
+#' 
+#' A class for providing a file name reference to a GML document.
+#' 
 #' @usage NULL
 #' @format NULL
 #' @import R6

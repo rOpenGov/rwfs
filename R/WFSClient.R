@@ -12,7 +12,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' @title WFS client abstract class
+#' WFS client abstract class
+#' 
+#' An abstract class to represent OGC's WFS.
+#' 
 #' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, \code{\link{WFSRequest}}
 #' @usage NULL
 #' @format NULL
