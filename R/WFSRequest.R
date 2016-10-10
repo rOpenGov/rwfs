@@ -124,14 +124,8 @@ WFSCachingRequest <- R6::R6Class(
         return(character(0))
       }
       return(destFile)      
-    },
-    
-    print = function(...) {
-      cat(private$getURL(), "\n")
-      return(invisible(self))
     }
-  )
-)
+))
 
 #' A class for providing a file name reference to a GML document
 #' 
