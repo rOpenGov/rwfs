@@ -103,11 +103,6 @@ WFSStreamingRequest <- R6::R6Class(
         self$setParameters(service = "WFS", version = version, 
                            request = "GetFeature", typeName = typeNames, ...)
       }
-    },
-    
-    getDataSource = function() {
-      # Simply return the data source URL as this will be directly stremed
-      return(private$getURL())
     }
   )
 )
@@ -130,7 +125,6 @@ WFSCachingRequest <- R6::R6Class(
   ),
   public = list(
     getDataSource = function() {
-      message("Downloading and reading from the data source")
       destFile <- tempfile()
       success <- download.file(private$getURL(), destFile, "internal")
       if (success != 0) {
