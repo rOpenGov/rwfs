@@ -3,8 +3,8 @@ Type: Package
 Title: WFS client for R
 Version: 0.1.14
 Date: 2015-01-21
-Author: Jussi Jousimo
-Maintainer: Jussi Jousimo <jvj@iki.fi>
+Author: Jussi Jousimo <jvj@iki.fi>
+Maintainer: Joona Lehtomaki <joona.lehtomaki@gmail.com>
 Description: WFS client for R
 License: BSD_2_clause + file LICENSE
 Depends:
