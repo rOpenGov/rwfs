@@ -4,6 +4,6 @@ inst/extras/.RData
 
 # Travis scripts
 .travis.yml
-
 .gitignore
 .git
+^appveyor\.yml$
