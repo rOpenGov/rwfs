@@ -34,7 +34,6 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
-        
       layers <- try(rgdal::ogrListLayers(dsn = dataSource)) 
       if (inherits(layers, "try-error")) {
         if (length(grep("Cannot open data source", layers)) == 1) {
@@ -186,6 +185,8 @@ WFSCachingClient <- R6::R6Class(
         }
         private$cachedResponseFile <- destFile
         private$requestHash <- digest(private$request)
+      } else {
+        message("Using cached response")
       }
       return(invisible(self))
     }
