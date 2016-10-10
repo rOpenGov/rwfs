@@ -154,6 +154,8 @@ WFSStreamingClient <- R6::R6Class(
   inherit = WFSClient,
   public = list(
     listLayers = function() {
+      message("Streaming layers directly from the data source\n",
+              private$request$getDataSource())
       layers <- private$.listLayers(dataSource = private$request$getDataSource())
       return(layers)
     },
@@ -162,7 +164,8 @@ WFSStreamingClient <- R6::R6Class(
       if (missing(layer)) {
         stop("Required argument 'layer' missing.")
       }
-        
+      message("Reading layers directly from the data source\n", 
+              private$request$getDataSource()) 
       response <- private$.getLayer(dataSource = private$request$getDataSource(), 
                                     layer = layer, crs = crs, swapAxisOrder = swapAxisOrder)
       return(response)
@@ -197,8 +200,6 @@ WFSCachingClient <- R6::R6Class(
         }
         private$cachedResponseFile <- destFile
         private$requestHash <- digest(private$request)
-      } else {
-        message("Using cached response")
       }
       return(invisible(self))
     }
