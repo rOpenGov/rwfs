@@ -61,7 +61,6 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
-
       response <- try(rgdal::readOGR(dsn = dataSource, layer = layer, p4s = crs, 
                                      stringsAsFactors = FALSE))
       if (inherits(response, "try-error")) {
@@ -238,19 +237,26 @@ WFSCachingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, parameters) {
+    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
+                        parameters, ogr2ogr = FALSE)  {
+      
+      # If a character is returned, there is no destFile
       if (is.character(private$cacheResponse())) {
         return(character(0))
       }
-      
+      # Get the path to the response file
       sourceFile <- private$cachedResponseFile
-      if (!missing(parameters)) {
+      # Local ogr2ogr conversion is done only if ogr2ogr = TRUE. 
+      # parameters can then contain ogr2ogr-specific parameters
+      # (but potentially something else as well).
+      if (ogr2ogr && !missing(parameters)) {
         ogr2ogrParams <- ""
-        # -splitlistfields not needed for rgdal >= 0.9.1
-        if (!is.null(parameters$splitListFields) && parameters$splitListFields) {
+        # Check which parameters are provided
+        # -splitlistfields not really needed for rgdal >= 0.9.1
+        if (!is.null(parameters$splitListFields)) {
           ogr2ogrParams <- paste(ogr2ogrParams, "-splitlistfields")
         }
-        if (!is.null(parameters$explodeCollections) && parameters$explodeCollections) {
+        if (!is.null(parameters$explodeCollections)) {
           ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
         }
         if (ogr2ogrParams != "") {
@@ -258,9 +264,10 @@ WFSCachingClient <- R6::R6Class(
                                    layer = layer, parameters = ogr2ogrParams)
         }
       }
-      
-      response <- private$.getLayer(dataSource = sourceFile, layer = layer, crs = crs, 
-                                    swapAxisOrder = swapAxisOrder)
+      # If no ogr2ogr conversion is requested, just use (cached) response
+      # file path as data source
+      response <- private$.getLayer(dataSource = sourceFile, layer = layer, 
+                                    crs = crs, swapAxisOrder = swapAxisOrder)
       return(response)
     }
   )
