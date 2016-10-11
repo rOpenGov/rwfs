@@ -1,7 +1,7 @@
 Package: rwfs
 Type: Package
 Title: R clients for Open Geospatial Consortium's (OGC) Web Feature Services (WFS)
-Version: 0.1.14
+Version: 0.1.15
 Date: 2015-01-21
 Authors@R: c(
 	person("Jussi", "Jousimo", role = c("cre", "aut"), email = "jvj@iki.fi"),
