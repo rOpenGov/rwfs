@@ -25,6 +25,11 @@ test_that("Setting up clients", {
                       private$getParametersString())
         return(url)
       }
+    ),
+    public = list(
+      getDataSource = function() {
+        return(private$getURL())
+      }
     )
   )
   
