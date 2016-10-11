@@ -43,7 +43,7 @@ test_that("Setting up clients", {
   # Instantiate a new cached client using the request
   cached_client <- rwfs::WFSCachingClient$new(request = cached_request)
   cached_layers <- cached_client$listLayers()
-  cached_response <- cached_client$getLayer(layer = cached_layers[1], 
+  cached_response <- cached_client$getLayer(layer = cached_layers[1], ogr2ogr = TRUE,
                                             parameters = list(splitListFields = TRUE))
   
   stream_request <- TestStreamingWFSRequest$new()
