@@ -1,37 +1,36 @@
 context("WFSRequest and WFSClient inheritance")
 
-test_that("Setting up clients", {  
+# Use a public WFS (1.0.0/1.1.0) server to query world cities
+TestCachingWFSRequest <- R6::R6Class(
+  "TestCachingWFSRequest",
+  inherit = WFSCachingRequest,
+  private = list(
+    getURL = function() {
+      url <- paste0("http://demo.mapserver.org/cgi-bin/wfs?", 
+                    private$getParametersString())
+      return(url)
+    }
+  )
+)
 
-  # Use a public WFS (1.1.0) server to query the country borders of the 
-  # world (data from Natural Earth)
-  TestCachingWFSRequest <- R6::R6Class(
-    "TestCachingWFSRequest",
-    inherit = WFSCachingRequest,
-    private = list(
-      getURL = function() {
-        url <- paste0("http://demo.mapserver.org/cgi-bin/wfs?", 
-                      private$getParametersString())
-        return(url)
-      }
-    )
+TestStreamingWFSRequest <- R6::R6Class(
+  "TestStreamingWFSRequest",
+  inherit = WFSStreamingRequest,
+  private = list(
+    getURL = function() {
+      url <- paste0("http://demo.mapserver.org/cgi-bin/wfs?", 
+                    private$getParametersString())
+      return(url)
+    }
+  ),
+  public = list(
+    getDataSource = function() {
+      return(private$getURL())
+    }
   )
-  
-  TestStreamingWFSRequest <- R6::R6Class(
-    "TestStreamingWFSRequest",
-    inherit = WFSStreamingRequest,
-    private = list(
-      getURL = function() {
-        url <- paste0("http://demo.mapserver.org/cgi-bin/wfs?", 
-                      private$getParametersString())
-        return(url)
-      }
-    ),
-    public = list(
-      getDataSource = function() {
-        return(private$getURL())
-      }
-    )
-  )
+)
+
+test_that("Setting up clients", {  
   
   # Instantiate a new TestWFSRequest object
   cached_request <- TestCachingWFSRequest$new()
