@@ -5,7 +5,7 @@ rwfs
 [![Build Status](https://api.travis-ci.org/rOpenGov/rwfs.png)](https://travis-ci.org/rOpenGov/rwfs)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rOpenGov/rwfs?branch=master&svg=true)](https://ci.appveyor.com/project/rOpenGov/rwfs)
 [![](http://www.r-pkg.org/badges/version/rwfs)](http://www.r-pkg.org/pkg/rwfs)
-#[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/rwfs)](http://www.r-pkg.org/pkg/rwfs)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/rwfs)](http://www.r-pkg.org/pkg/rwfs)
 
 WFS client for R
 
