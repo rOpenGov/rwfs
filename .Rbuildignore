@@ -4,6 +4,13 @@ inst/extras/.RData
 
 # Travis scripts
 .travis.yml
+
+# git
 .gitignore
 .git
+
+# AppVeyor
 ^appveyor\.yml$
+
+# Code coverage
+codecov.yml
