@@ -239,7 +239,7 @@ WFSCachingClient <- R6::R6Class(
     },
     
     getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
-                        parameters, ogr2ogr = FALSE)  {
+                        parameters, ogr2ogr = FALSE, ...)  {
       
       # If a character is returned, there is no destFile
       if (is.character(private$cacheResponse())) {
@@ -268,7 +268,8 @@ WFSCachingClient <- R6::R6Class(
       # If no ogr2ogr conversion is requested, just use (cached) response
       # file path as data source
       response <- private$.getLayer(dataSource = sourceFile, layer = layer, 
-                                    crs = crs, swapAxisOrder = swapAxisOrder)
+                                    crs = crs, swapAxisOrder = swapAxisOrder,
+                                    ...)
       return(response)
     }
   )
