@@ -51,7 +51,7 @@ WFSClient <- R6::R6Class(
       return(layers)
     },
     
-    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE) {
+    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE, ...) {
       if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
         }
@@ -62,7 +62,7 @@ WFSClient <- R6::R6Class(
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
       response <- try(rgdal::readOGR(dsn = dataSource, layer = layer, p4s = crs, 
-                                     stringsAsFactors = FALSE))
+                                     stringsAsFactors = FALSE, ...))
       if (inherits(response, "try-error")) {
         if (length(grep("Cannot open data source", response)) == 1) {
           warning("Unable to connect to the data source or error in query result.")
@@ -159,14 +159,15 @@ WFSStreamingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder= FALSE, parameters) {
+    getLayer = function(layer, crs = NULL, swapAxisOrder= FALSE, parameters, ...) {
       if (missing(layer)) {
         stop("Required argument 'layer' missing.")
       }
       message("Reading layers directly from the data source\n", 
               private$request$getDataSource()) 
       response <- private$.getLayer(dataSource = private$request$getDataSource(), 
-                                    layer = layer, crs = crs, swapAxisOrder = swapAxisOrder)
+                                    layer = layer, crs = crs, swapAxisOrder = swapAxisOrder,
+                                    ...)
       return(response)
     }
   )
