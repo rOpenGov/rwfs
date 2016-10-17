@@ -61,8 +61,11 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
+      # GML files may have non-unique FIDS, take this into a account by passing 
+      # disambiguateFIDs = TRUE to readOGR
       response <- try(rgdal::readOGR(dsn = dataSource, layer = layer, p4s = crs, 
-                                     stringsAsFactors = FALSE, ...))
+                                     stringsAsFactors = FALSE,
+                                     disambiguateFIDs = TRUE, ...))
       if (inherits(response, "try-error")) {
         if (length(grep("Cannot open data source", response)) == 1) {
           warning("Unable to connect to the data source or error in query result.")
@@ -266,10 +269,9 @@ WFSCachingClient <- R6::R6Class(
         }
       }
       # If no ogr2ogr conversion is requested, just use (cached) response
-      # file path as data source
+      # file path as data source. 
       response <- private$.getLayer(dataSource = sourceFile, layer = layer, 
-                                    crs = crs, swapAxisOrder = swapAxisOrder,
-                                    ...)
+                                    crs = crs, swapAxisOrder = swapAxisOrder, ...)
       return(response)
     }
   )
