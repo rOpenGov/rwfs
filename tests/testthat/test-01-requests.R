@@ -5,8 +5,7 @@ source("setup.R")
 # Tests -------------------------------------------------------------------
 
 test_that("Inheriting and instantiating WFSStreamingRequest works", {
-  TestStreamingWFSRequest <- subclass_factory(WFSStreamingRequest)
-  streaming_request <- TestStreamingWFSRequest$new()
+  streaming_request <- TestWFSStreamingRequest$new()
   expect_is(streaming_request, "WFSStreamingRequest",
             info = "Sub class must inherit from WFSStreamingRequest")
   
@@ -36,9 +35,7 @@ test_that("Inheriting and instantiating WFSStreamingRequest works", {
 })
 
 test_that("Inheriting and instantiating WFSCachingRequest works", {  
-  
-  TestCachingWFSRequest <- subclass_factory(WFSCachingRequest)
-  cached_request <- TestCachingWFSRequest$new()
+  cached_request <- TestWFSCachingRequest$new()
   expect_is(cached_request, "WFSCachingRequest",
             info = "Sub class must inherit from WFSCachingRequest")
   
@@ -75,11 +72,5 @@ test_that("Inheriting and instantiating WFSCachingRequest works", {
   
   expect_equal(correct_params, cached_request$getParameters(),
                info = "Parameters not correctly set")
-  
-  # Instantiate a new cached client using the request
-  #cached_client <- rwfs::WFSCachingClient$new(request = cached_request)
-  #cached_layers <- cached_client$listLayers()
-  #cached_response <- cached_client$getLayer(layer = cached_layers[1], ogr2ogr = TRUE,
-  #                                          parameters = list(splitListFields = TRUE))
   
 })

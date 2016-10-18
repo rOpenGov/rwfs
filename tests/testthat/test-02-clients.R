@@ -6,8 +6,7 @@ source("setup.R")
 
 test_that("Inheriting and instantiating WFSStreamingClient works", {  
   # Create a request instance
-  TestStreamingWFSRequest <- subclass_factory(WFSStreamingRequest)
-  streaming_request <- TestStreamingWFSRequest$new()
+  streaming_request <- TestWFSStreamingRequest$new()
   streaming_request$getFeature(version = "1.1.0",
                                typeNames = "cities",
                                maxFeatures = 10)
@@ -30,8 +29,7 @@ test_that("Inheriting and instantiating WFSStreamingClient works", {
 
 test_that("Inheriting and instantiating WFSCachingClient works", {  
   # Create a request instance
-  TestCachingWFSRequest <- subclass_factory(WFSCachingRequest)
-  caching_request <- TestCachingWFSRequest$new()
+  caching_request <- TestWFSCachingRequest$new()
   caching_request$getFeature(version = "1.1.0",
                              typeNames = "cities",
                              maxFeatures = 10)
