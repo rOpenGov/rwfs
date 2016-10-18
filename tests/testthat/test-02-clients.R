@@ -16,7 +16,7 @@ test_that("Inheriting and instantiating WFSStreamingClient works", {
 
   expect_equal(structure("cities", driver = "GML", nlayers = 1), 
                streaming_layers,
-               info = "Layer structure not correct")
+               info = "Layer structure in WFSStreamingClient not correct")
   
   streaming_response <- streaming_client$getLayer(layer = streaming_layers[1], 
                                                   parameters = list(splitListFields = TRUE),
@@ -39,7 +39,7 @@ test_that("Inheriting and instantiating WFSCachingClient works", {
   
   expect_equal(structure("cities", driver = "GML", nlayers = 1), 
                caching_layers,
-               info = "Layer structure not correct")
+               info = "Layer structure in WFSCachingClient not correct")
   
   caching_response <- caching_client$getLayer(layer = caching_layers[1], 
                                               ogr2ogr = FALSE,
