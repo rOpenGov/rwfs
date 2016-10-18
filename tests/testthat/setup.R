@@ -2,25 +2,35 @@
 
 base_url <- "http://demo.mapserver.org/cgi-bin/wfs?"
 
-subclass_factory <- function(parent_class) {
-  instance <-  R6::R6Class(
-    paste0("Test", parent_class$classname),
-    inherit = parent_class,
-    private = list(
-      getURL = function() {
-        # Use a public WFS (1.0.0/1.1.0) server to query world cities
-        url <- paste0(base_url, private$getParametersString())
-        return(url)
-      }
-    ),
-    public = list(
-      getDataSource = function() {
-        return(private$getURL())
-      }
-    )
+  
+TestWFSStreamingRequest <-  R6::R6Class(
+  "TestWFSStreamingRequest",
+  inherit = WFSStreamingRequest,
+  private = list(
+    getURL = function() {
+      # Use a public WFS (1.0.0/1.1.0) server to query world cities
+      url <- paste0(base_url, private$getParametersString())
+      return(url)
+    }
+  ),
+  public = list(
+    getDataSource = function() {
+      return(private$getURL())
+    }
   )
-  return(instance)
-}
+)
+
+TestWFSCachingRequest <-  R6::R6Class(
+  "TestWFSCachingRequest",
+  inherit = WFSCachingRequest,
+  private = list(
+    getURL = function() {
+      # Use a public WFS (1.0.0/1.1.0) server to query world cities
+      url <- paste0(base_url, private$getParametersString())
+      return(url)
+    }
+  )
+)
 
 # Generate data agains which WFS* responses are compared. This is essentially 
 # dput() output from a live query. THIS WILL BREAK if something changes
