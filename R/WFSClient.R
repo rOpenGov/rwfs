@@ -51,7 +51,8 @@ WFSClient <- R6::R6Class(
       return(layers)
     },
     
-    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE, ...) {
+    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE, 
+                         createFid = TRUE, ...) {
       if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
         }
@@ -74,6 +75,10 @@ WFSClient <- R6::R6Class(
         else {
           stop("Fatal error.")
         }
+      }
+      # Create a fid field if requested
+      if (createFid) {
+        response@data <- cbind(fid = 1:nrow(response@data), response@data)
       }
       
       # Hack and will be removed once rgdal 0.9 becomes available in CRAN
@@ -272,12 +277,6 @@ WFSCachingClient <- R6::R6Class(
       # file path as data source. 
       response <- private$.getLayer(dataSource = sourceFile, layer = layer, 
                                     crs = crs, swapAxisOrder = swapAxisOrder, ...)
-      # If ogr2ogr conversion has not been done, response will not have a fid
-      # field: create it manually
-      if (!ogr2ogr) {
-        response@data <- cbind(fid = 1:nrow(response@data), response@data)
-      }
-      
       return(response)
     }
   )
