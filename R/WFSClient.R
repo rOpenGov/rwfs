@@ -272,6 +272,12 @@ WFSCachingClient <- R6::R6Class(
       # file path as data source. 
       response <- private$.getLayer(dataSource = sourceFile, layer = layer, 
                                     crs = crs, swapAxisOrder = swapAxisOrder, ...)
+      # If ogr2ogr conversion has not been done, response will not have a fid
+      # field: create it manually
+      if (!ogr2ogr) {
+        response@data <- cbind(fid = 1:nrow(response@data), response@data)
+      }
+      
       return(response)
     }
   )
