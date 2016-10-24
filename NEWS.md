@@ -16,4 +16,4 @@ for quering the request object's current parameters.
 ### OTHER
 
 + Basic tests using `testthat` in place.
-+ Use `download.file(methods = "internal")` in `ẀFSClient::getRaster()`.
++ Use `download.file(methods = "internal", mode = "wb")` in `ẀFSClient::getRaster()`.
