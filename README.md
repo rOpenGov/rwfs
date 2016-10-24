@@ -28,7 +28,7 @@ The package can be installed from github using `devtools`
 ```
 install.packages("devtools")
 library("devtools")
-install_github("ropengov/gisfin")
+install_github("ropengov/rwfs")
 ```
 and loaded with
 ```
