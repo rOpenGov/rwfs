@@ -1,4 +1,4 @@
-## CHANGES IN VERSION 0.1.15.9000 (2016-10-17)
+## CHANGES IN VERSION 0.2.0 (2016-10-26)
 
 ### MAJOR CHANGES
 
@@ -6,7 +6,7 @@
 reading in data, even from WFS 2.0.0 source. It is still available
 as an optional feature in `WFSCachingClient`. This change should
 make it easier to use the package on various platforms where
-`ogr2ogr` is not necessarily available.
+`ogr2ogr` is not necessarily available or easy to set up.
 
 ### NEW FEATURES
 
