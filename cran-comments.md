@@ -6,11 +6,20 @@
 There were no ERRORs or WARNINGs. 
 
 There was 1 NOTE:
-  
-  * checking dependencies in R code ... NOTE
-Namespace in Imports field not imported from: 'R6'
 
-R6 is a build-time dependency.
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Joona Lehtomaki <joona.lehtomaki@gmail.com>’
+
+New submission
+
+License components with restrictions and base license permitting such:
+  BSD_2_clause + file LICENSE
+File 'LICENSE':
+  YEAR: 2014
+  COPYRIGHT HOLDER: Jussi Jousimo
+
+
+This is my first submission to CRAN after assuming the maintainer role of the package.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.
