@@ -1,5 +1,3 @@
-skip_on_cran()
-skip_on_travis()
 context("WFS*Client classes: inheritance, instances and methods")
 
 source("setup.R")
