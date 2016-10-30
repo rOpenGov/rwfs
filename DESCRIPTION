@@ -1,6 +1,6 @@
 Package: rwfs
 Type: Package
-Title: R Client for Open Geospatial Consortium's Web Feature Services
+Title: R Clients for Open Geospatial Consortium's Web Feature Services
 Version: 0.2.0
 Date: 2016-10-26
 Authors@R: c(
