@@ -1,4 +1,5 @@
 # Setup functions and data ------------------------------------------------
+library(sp)
 
 base_url <- "http://demo.mapserver.org/cgi-bin/wfs?"
 
