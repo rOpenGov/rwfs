@@ -10,3 +10,14 @@
 
 # FMI API key
 inst/extras/apikey.txt
+
+# Secondary files
+*~
+.gitignore~
+inst/extras/.RData
+inst/extras/*~
+inst/extras/document.Rout
+inst/extras/rwfs.Rcheck
+inst/extras/*.tar.gz
+
+
