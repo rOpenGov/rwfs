@@ -1,0 +1,25 @@
+citHeader("Kindly cite the rwfs R package as follows:")
+
+note <- sprintf("R package version %s", meta$Version)
+
+citEntry(entry="misc",
+         title = "rwfs R package",
+         author = personList(
+	   person(given ="Jussi", family="Jousimo"),
+	   person(given = "Joona", family="Lehtomaki", email = "joona.lehtomaki@gmail.com"),
+	   person(given = "Juuso", family="Parkkinen"),
+	   person(given = "Leo", family="Lahti")	   
+         ),
+	 journal = "",
+	 year = "2014-2016",
+	 url = "https://github.com/rOpenGov/rwfs",
+	 note = note, 
+         textVersion =
+         paste("(C) Jussi Jousimo, Joona Lehtomaki, Juuso Parkkinen, Leo Lahti 2014-2016.",
+               "rwfs R package.",
+	       note,
+	       "URL: https://github.com/rOpenGov/rwfs",
+               sep=" ")
+         )
+
+
