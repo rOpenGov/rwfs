@@ -13,7 +13,8 @@ test_that("Inheriting and instantiating WFSStreamingClient works", {
   # Create the client instance
   streaming_client <- WFSStreamingClient$new(request = streaming_request)
   streaming_layers <- streaming_client$listLayers()
-
+  
+  print(streaming_layers)
   expect_equal(structure("cities", driver = "GML", nlayers = 1), 
                streaming_layers,
                info = "Layer structure in WFSStreamingClient not correct")
