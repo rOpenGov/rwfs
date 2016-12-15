@@ -50,4 +50,3 @@ test_that("Inheriting and instantiating WFSCachingClient works", {
                info = "Response SpatialPointsDataFrame not what expected")
   
 })
-
