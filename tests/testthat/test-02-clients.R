@@ -14,6 +14,8 @@ test_that("Inheriting and instantiating WFSStreamingClient works", {
   streaming_client <- WFSStreamingClient$new(request = streaming_request)
   streaming_layers <- streaming_client$listLayers()
   
+  print(streaming_layers[1])
+  
   streaming_response <- streaming_client$getLayer(layer = streaming_layers[1], 
                                                   parameters = list(splitListFields = TRUE),
                                                   verbose = FALSE)
