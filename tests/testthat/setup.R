@@ -38,14 +38,19 @@ TestWFSCachingRequest <-  R6::R6Class(
 # at the data source.
 
 test_data <- new("SpatialPointsDataFrame", 
-                 data = structure(list(fid = 1:10, gml_id = c("cities.8338", "cities.1225", 
-                                                                "cities.2616", "cities.9339", "cities.9181", "cities.9055", "cities.5102", 
-                                                                "cities.1350", "cities.1663", "cities.6382"), POPULATION = c("12116379", 
-                                                                                                                             "10537226", "10232924", "10194978", "9630586", "9418987", "9005576", 
-                                                                                                                             "8942250", "8827879", "8681360"), NAME = c("Buenos Aires", "Karachi", 
-                                                                                                                                                                        "Manila", "Sao Paulo", "Seoul", "Istanbul", "Shanghai", "Dhaka", 
-                                                                                                                                                                        "Jakarta", "Mexico")), .Names = c("fid", "gml_id", "POPULATION", 
-                                                                                                                                                                                                          "NAME"), row.names = c(NA, -10L), class = "data.frame")
+                 data = structure(list(fid = 1:10, 
+                                       gml_id = c("cities.8338", "cities.1225", "cities.2616", 
+                                                  "cities.9339", "cities.9181", "cities.9055", 
+                                                  "cities.5102", "cities.1350", "cities.1663", 
+                                                  "cities.6382"), 
+                                       POPULATION = c(12116379, 10537226, 10232924, 
+                                                      10194978, 9630586, 9418987, 
+                                                      9005576,  8942250, 8827879, 8681360), 
+                                       NAME = c("Buenos Aires", "Karachi", "Manila", "Sao Paulo", 
+                                                "Seoul", "Istanbul", "Shanghai", "Dhaka", "Jakarta", 
+                                                "Mexico")), 
+                                  .Names = c("fid", "gml_id", "POPULATION", "NAME"), 
+                                  row.names = c(NA, -10L), class = "data.frame")
                  , coords.nrs = numeric(0)
                  , coords = structure(c(-34.5875, 24.866667, 14.604167, -23.533333, 37.566389, 
                                         41.018611, 31.222222, 23.723056, -6.174444, 19.434167, -58.6725, 

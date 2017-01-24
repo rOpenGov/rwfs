@@ -17,6 +17,9 @@ test_that("Inheriting and instantiating WFSStreamingClient works", {
   streaming_response <- streaming_client$getLayer(layer = streaming_layers[1], 
                                                   parameters = list(splitListFields = TRUE),
                                                   verbose = FALSE)
+  # Manually coerce POPULATION to numeric, this is so already in the test
+  # data
+  streaming_response$POPULATION <- as.numeric(streaming_response$POPULATION)
   
   expect_equal(streaming_response, test_data,
                info = "Response SpatialPointsDataFrame not what expected")
@@ -41,6 +44,8 @@ test_that("Inheriting and instantiating WFSCachingClient works", {
                                               ogr2ogr = FALSE,
                                               parameters = list(splitListFields = TRUE),
                                               verbose = FALSE)
+  
+  caching_response$POPULATION <- as.numeric(caching_response$POPULATION)
   
   expect_equal(caching_response, test_data,
                info = "Response SpatialPointsDataFrame not what expected")
