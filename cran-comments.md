@@ -1,6 +1,8 @@
 ## Test environments
 * ubuntu 14.04 (on travis-ci), R 3.3.1
+* 
 * win-builder (devel and release)
+* local openSUSE Tumbleweed (Linux x64), R 3.3.2
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
@@ -22,4 +24,5 @@ File 'LICENSE':
 This is my first submission to CRAN after assuming the maintainer role of the package.
 
 ## Downstream dependencies
+
 There are currently no downstream dependencies for this package.
