@@ -11,4 +11,3 @@ The abstract method \code{getURL} must be overloaded in a subclass to provide a 
 Jussi Jousimo \email{jvj@iki.fi}
 }
 \keyword{datasets}
-

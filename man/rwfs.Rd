@@ -19,4 +19,3 @@ See examples in the \pkg{fmi} (\url{http://www.github.com/rOpenGov/fmi}) and the
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
 }
-

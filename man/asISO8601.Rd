@@ -21,4 +21,3 @@ asISO8601("2014-01-01")
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
 }
-

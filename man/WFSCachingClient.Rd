@@ -8,11 +8,10 @@
 Dispatches a WFS request, saves the response to a file and parses the file. The data can be converted
 using ogr2ogr of RGDAL. Provides a caching mechanism for subsequent queries on the same data.
 }
-\author{
-Jussi Jousimo \email{jvj@iki.fi}
-}
 \seealso{
 \code{\link{WFSRequest}}, \code{\link{WFSStreamingClient}}
 }
+\author{
+Jussi Jousimo \email{jvj@iki.fi}
+}
 \keyword{datasets}
-
