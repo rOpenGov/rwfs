@@ -12,10 +12,10 @@ Description: R clients for Open Geospatial Consortium's (OGC) Web Feature Servic
 Maintainer: Joona Lehtomaki <joona.lehtomaki@gmail.com>
 License: BSD_2_clause + file LICENSE
 Depends:
-    R (>= 3.0.1),
-    R6
+    R (>= 3.0.1)
 Imports:
     sp,
+    R6,
     rgdal (>= 1.1.10),
     digest
 Suggests:
@@ -26,4 +26,4 @@ Suggests:
     testthat
 URL: https://github.com/ropengov/rwfs
 LazyLoad: yes
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
