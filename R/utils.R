@@ -19,7 +19,9 @@
 #' @examples asISO8601("2014-01-01")
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @export
-asISO8601 <- function(dt) return(strftime(dt, "%Y-%m-%dT%H:%M:%SZ"))
+asISO8601 <- function(dt) {
+  return(strftime(dt, "%Y-%m-%dT%H:%M:%SZ"))
+}
 
 convertOGR = function(sourceFile, layer, parameters) {
   if (!file.exists(sourceFile))
