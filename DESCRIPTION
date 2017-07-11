@@ -4,10 +4,10 @@ Title: R Clients for Open Geospatial Consortium's Web Feature Services
 Version: 0.2.0.9000
 Date: 2016-10-26
 Authors@R: c(
-	person("Joona" , "Lehtomaki", role = c("aut", "cre"), email = "joona.lehtomaki@gmail.com"),
-  	person("Jussi", "Jousimo", role = "aut"),
-	person("Juuso", "Parkkinen", role = "ctb"),
- 	person("Leo", "Lahti", role = "ctb"))
+  person("Joona" , "Lehtomaki", role = c("aut", "cre"), email = "joona.lehtomaki@gmail.com"),
+  person("Jussi", "Jousimo", role = "aut"),
+  person("Juuso", "Parkkinen", role = "ctb"),
+  person("Leo", "Lahti", role = "ctb"))
 Description: R clients for Open Geospatial Consortium's (OGC) Web Feature Services (WFS).
 Maintainer: Joona Lehtomaki <joona.lehtomaki@gmail.com>
 License: BSD_2_clause + file LICENSE
