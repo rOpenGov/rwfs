@@ -229,8 +229,7 @@ WFSCachingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
-                        parameters, ogr2ogr = FALSE, ...)  {
+    getLayer = function(layer, ...)  {
       
       # If a character is returned, there is no destFile
       if (is.character(private$cacheResponse())) {
@@ -238,28 +237,9 @@ WFSCachingClient <- R6::R6Class(
       }
       # Get the path to the response file
       sourceFile <- private$cachedResponseFile
-      # Local ogr2ogr conversion is done only if ogr2ogr = TRUE. 
-      # parameters can then contain ogr2ogr-specific parameters
-      # (but potentially something else as well).
-      if (ogr2ogr && !missing(parameters)) {
-        ogr2ogrParams <- ""
-        # Check which parameters are provided
-        # -splitlistfields not really needed for rgdal >= 0.9.1
-        if (!is.null(parameters$splitListFields)) {
-          ogr2ogrParams <- paste(ogr2ogrParams, "-splitlistfields")
-        }
-        if (!is.null(parameters$explodeCollections)) {
-          ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
-        }
-        if (ogr2ogrParams != "") {
-          sourceFile <- convertOGR(sourceFile = private$cachedResponseFile, 
-                                   layer = layer, parameters = ogr2ogrParams)
-        }
-      }
-      # If no ogr2ogr conversion is requested, just use (cached) response
-      # file path as data source. 
-      response <- private$.getLayer(dataSource = sourceFile, layer = layer, 
-                                    crs = crs, swapAxisOrder = swapAxisOrder, ...)
+      # Use (cached) response file path as data source. 
+      response <- private$.getLayer(dataSource = sourceFile, 
+                                    layer = layer, ...)
       return(response)
     }
   )
