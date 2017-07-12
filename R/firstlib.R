@@ -1,6 +1,3 @@
-#' @import sp
-#' @import rgdal
-
 .onAttach <- function(lib, pkg)
 {
 

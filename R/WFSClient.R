@@ -20,6 +20,7 @@
 #' @usage NULL
 #' @format NULL
 #' @import R6
+#' @import raster
 #' @import sf
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSClient
@@ -136,7 +137,6 @@ WFSClient <- R6::R6Class(
 #' @usage NULL
 #' @format NULL
 #' @import R6
-#' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSStreamingClient
 #' @export WFSStreamingClient
@@ -171,7 +171,6 @@ WFSStreamingClient <- R6::R6Class(
 #' @usage NULL
 #' @format NULL
 #' @import R6
-#' @import rgdal
 #' @import digest
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSCachingClient
