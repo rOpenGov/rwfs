@@ -14,12 +14,12 @@ License: BSD_2_clause + file LICENSE
 Depends:
     R (>= 3.0.1)
 Imports:
+    digest,
     R6,
-    sf,
-    digest
+    raster,
+    sf
 Suggests:
     knitr,
-    raster,
     rmarkdown,
     roxygen2,
     testthat
