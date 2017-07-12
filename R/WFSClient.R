@@ -20,8 +20,7 @@
 #' @usage NULL
 #' @format NULL
 #' @import R6
-#' @import sp
-#' @import rgdal
+#' @import sf
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSClient
 #' @export WFSClient
@@ -37,11 +36,9 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
-      layers <- try(rgdal::ogrListLayers(dsn = dataSource)) 
+      layers <- try(sf::st_layers(dsn = dataSource)) 
       if (inherits(layers, "try-error")) {
         if (length(grep("Cannot open data source", layers)) == 1) {
-          # GDAL < 1.11.0 returns "Cannot open data source" for connection problems and zero layer responses
-          # GDAL >= 1.11.0 returns no layers for zero layer responses
           warning("Unable to connect to the data source or error in query result.")
           return(character(0))
         }
@@ -51,8 +48,7 @@ WFSClient <- R6::R6Class(
       return(layers)
     },
     
-    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE, 
-                         createFid = TRUE, ...) {
+    .getLayer = function(dataSource, layer, ...) {
       if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
         }
@@ -62,11 +58,9 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
-      # GML files may have non-unique FIDS, take this into a account by passing 
-      # disambiguateFIDs = TRUE to readOGR
-      response <- try(rgdal::readOGR(dsn = dataSource, layer = layer, p4s = crs, 
-                                     stringsAsFactors = FALSE,
-                                     disambiguateFIDs = TRUE, ...))
+    
+      response <- try(sf::st_read(dsn = dataSource, layer = layer$name,
+                                  stringsAsFactors = FALSE, ...))
       if (inherits(response, "try-error")) {
         if (length(grep("Cannot open data source", response)) == 1) {
           warning("Unable to connect to the data source or error in query result.")
@@ -75,18 +69,6 @@ WFSClient <- R6::R6Class(
         else {
           stop("Fatal error.")
         }
-      }
-      # Create a fid field if requested
-      if (createFid) {
-        response@data <- cbind(fid = 1:nrow(response@data), response@data)
-      }
-      
-      # Hack and will be removed once rgdal 0.9 becomes available in CRAN
-      if (swapAxisOrder) {
-        xy <- sp::coordinates(response)
-        response@coords <- xy[,2:1]
-        response@bbox <- response@bbox[2:1,]
-        rownames(response@bbox) <- rownames(response@bbox)[2:1]
       }
       
       return(response)
@@ -169,15 +151,14 @@ WFSStreamingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder= FALSE, parameters, ...) {
+    getLayer = function(layer, ...) {
       if (missing(layer)) {
         stop("Required argument 'layer' missing.")
       }
       message("Reading layers directly from the data source\n", 
               private$request$getDataSource()) 
       response <- private$.getLayer(dataSource = private$request$getDataSource(), 
-                                    layer = layer, crs = crs, swapAxisOrder = swapAxisOrder,
-                                    ...)
+                                    layer = layer, ...)
       return(response)
     }
   )
