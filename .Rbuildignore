@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 inst/extras/.RData
+inst/extras/*.dia
 
 cran-comments.md
 

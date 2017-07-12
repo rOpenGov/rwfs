@@ -19,5 +19,4 @@ inst/extras/*~
 inst/extras/document.Rout
 inst/extras/rwfs.Rcheck
 inst/extras/*.tar.gz
-
-
+*.autosave
