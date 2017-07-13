@@ -14,7 +14,7 @@ test_that("Inheriting and instantiating WFSStreamingClient works", {
   streaming_client <- WFSStreamingClient$new(request = streaming_request)
   streaming_layers <- streaming_client$listLayers()
 
-  streaming_response <- streaming_client$getLayer(layer = streaming_layers[1],
+  streaming_response <- streaming_client$getLayer(layer = streaming_layers$name,
                                                   quiet = TRUE)
   # Manually coerce POPULATION to numeric, this is so already in the test
   # data
@@ -40,7 +40,7 @@ test_that("Inheriting and instantiating WFSCachingClient works", {
   expect_equal(caching_layers$features, 10, info = "Layer feature # not correct")
   expect_equal(caching_layers$field, 3, info = "Layer field # not correct")
   
-  caching_response <- caching_client$getLayer(layer = caching_layers[1],
+  caching_response <- caching_client$getLayer(layer = caching_layers$name,
                                               quiet = TRUE)
 
   caching_response$POPULATION <- as.numeric(caching_response$POPULATION)

@@ -60,7 +60,7 @@ WFSClient <- R6::R6Class(
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
     
-      response <- try(sf::st_read(dsn = dataSource, layer = layer$name,
+      response <- try(sf::st_read(dsn = dataSource, layer = layer,
                                   stringsAsFactors = FALSE, ...))
       if (inherits(response, "try-error")) {
         if (length(grep("Cannot open data source", response)) == 1) {
