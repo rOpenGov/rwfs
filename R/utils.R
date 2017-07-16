@@ -26,25 +26,3 @@
 asISO8601 <- function(dt) {
   return(strftime(dt, "%Y-%m-%dT%H:%M:%SZ"))
 }
-
-convertOGR = function(sourceFile, layer, parameters) {
-  if (!file.exists(sourceFile))
-    stop(paste0("File '", sourceFile, "' does not exist."))
-  
-  destFile <- tempfile()
-  
-  # QUICKFIX: Don't know why ogr2ogr fails to convert the original file (under Linux at least),
-  # but if the file is copied to a new location, everything seems to be fine.
-  ufoBugFix <- tempfile()
-  file.copy(sourceFile, ufoBugFix)
-  sourceFile <- ufoBugFix
-  
-  cmd <- paste("ogr2ogr -f GML", parameters, destFile, sourceFile, layer)
-  message(cmd)
-  errorCode <- system(cmd)
-  if (errorCode != 0) {
-    stop("Conversion failed.")
-  }
-  
-  return(destFile)
-}
