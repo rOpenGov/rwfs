@@ -12,13 +12,17 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' @title Returns date time string in ISO8601 format
-#' @description Converts an object which can be converted to a POSIXlt object to a ISO8601 date time string.
+#' Returns date time string in ISO8601 format
+#' 
+#' Converts an object which can be converted to a POSIXlt object to a ISO8601 
+#' date time string.
+#' 
 #' @param dt Date time object which can be converted to a POSIXlt object.
 #' @return Character string in ISO8601 format.
-#' @examples asISO8601("2014-01-01")
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @export
+#' @examples asISO8601("2014-01-01")
+#' 
 asISO8601 <- function(dt) {
   return(strftime(dt, "%Y-%m-%dT%H:%M:%SZ"))
 }
