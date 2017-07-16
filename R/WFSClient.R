@@ -12,19 +12,44 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' WFS client abstract class
+#' Class represeting a WFS client
 #' 
-#' An abstract class to represent OGC's WFS.
+#' An abstract class to represent OGC's WFS client in R. Other client classes
+#' in this package inherit this this class.
 #' 
-#' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, \code{\link{WFSRequest}}
+#' @docType class
+#' @format \code{\link{R6Class}} object.
+#' 
 #' @usage NULL
-#' @format NULL
+#' 
+#' @field test
+#' 
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(request)}}{This method is used to create object of this 
+#'         class with \code{request} as the request object containing WFS
+#'         connection information and methods. NOTE: as this is abstract class,
+#'         you shouldn't be creating instances of it.}
+#'   \item{setRequest(request)}{Set client's request object to \code{request}, 
+#'         which must inherit from \code{\link{WFSRequest}}.}
+#'   \item{listLayers()}{Not implemented in this abstract class, but it classes
+#'         inheriting this class.}
+#'   \item{getLayer}{Not implemented in this abstract class, but it classes
+#'         inheriting this class.}
+#'   \item{getRaster}{Get a raster layer from WFS }
+#' }
+#' 
 #' @import R6
 #' @import raster
 #' @import sf
-#' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSClient
 #' @export WFSClient
+#' 
+#' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, 
+#'          \code{\link{WFSRequest}}
+#' @author Jussi Jousimo \email{jvj@@iki.fi},
+#'         Joona Lehtomaki \email{joona.lehtomaki@@gmail.com}
+#'         
+#' 
 WFSClient <- R6::R6Class(
   "WFSClient",
   private = list(
@@ -105,8 +130,7 @@ WFSClient <- R6::R6Class(
       stop("Unimplemented method.", call. = FALSE)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
-                        parameters) {
+    getLayer = function(layer, ...) {
       stop("Unimplemented method.")
     },
     
