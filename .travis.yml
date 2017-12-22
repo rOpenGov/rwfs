@@ -1,7 +1,7 @@
 language: r
   - release
-  - oldrel
-  - devel
+#  - oldrel
+#  - devel
 sudo: required
 dist: trusty
 before_install:
