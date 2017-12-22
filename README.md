@@ -37,7 +37,7 @@ library(rwfs)
 
 #### Request and client classes
 
-The package consists of request and client classes which are of type [R6](http://cran.r-project.org/web/packages/R6/vignettes/Introduction.html). The request classes are used to construct a reference to a data source and provide access methods to the data. The client classes dispatch a request to obtain and possibly manipulate the data.
+The package consists of request and client classes which are of type [R6](https://CRAN.R-project.org/package=R6/vignettes/Introduction.html). The request classes are used to construct a reference to a data source and provide access methods to the data. The client classes dispatch a request to obtain and possibly manipulate the data.
 
 The request classes currently implemented are
 
