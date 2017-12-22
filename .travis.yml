@@ -5,8 +5,9 @@ apt_packages:
   - gdal-bin
   - libgdal1-dev
   - libproj-dev
+  - libudunits2-dev
 r_packages:
-  - rgdal
+  - sf
   - testthat
 r_github_packages: 
   - jimhester/covr
