@@ -21,12 +21,12 @@ This R package provides a client to access a [Web Feature Service](http://www.op
 
 #### Installation
 
-The `rwfs` package requires `R6`, `rgdal` and `raster` (optional) packages. Please refer to the [gisfin tutorial](https://github.com/rOpenGov/gisfin/blob/master/vignettes/gisfin_tutorial.md) for installation instructions of `rgdal`. The package can be installed from github using `devtools`
+`rwfs` can be installed from GitHub using `devtools`:
 
 ```r
 install.packages("devtools")
 library("devtools")
-install_github("ropengov/rwfs")
+devtools::install_github("ropengov/rwfs")
 ```
 
 and loaded with
@@ -46,8 +46,6 @@ The request classes currently implemented are
 * `GMLFile` for reading data from a [GML](http://en.wikipedia.org/wiki/Geography_Markup_Language) file.
 
 All request classes are abstract with the exception of `GMLFile` meaning that the user of `rwfs` must provide a subclass for each relevant class and implement abstract methods in the classes. The user may provide additional methods for accessing the data for convenience.
-
-Due to limited support for WFS 2.x in the `rgdal` package, which the `rwfs` package depends on, data in WFS 2.x is accessible only via downloading the data first and thus no streaming can be used (at least in some services).
 
 The following client classes are currently implemented
 
@@ -216,5 +214,5 @@ unlink(fileName)
 
 ### Acknowledgements
 
-  Roger Bivand for helping with the rgdal package.
+  Roger Bivand for helping with getting the WFS driver working on Windows.
 
