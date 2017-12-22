@@ -1,11 +1,12 @@
 language: r
 sudo: required
 dist: trusty
-apt_packages:
-  - gdal-bin
-  - libgdal1-dev
-  - libproj-dev
-  - libudunits2-dev
+addons:
+   apt:
+     packages:
+      - libgdal-dev
+      - libproj-dev
+      - libudunits2-dev
 r_packages:
   - sf
   - testthat
