@@ -24,10 +24,11 @@ in this package inherit this this class.
         you shouldn't be creating instances of it.}
   \item{setRequest(request)}{Set client's request object to \code{request}, 
         which must inherit from \code{\link{WFSRequest}}.}
-  \item{listLayers}{Not implemented in this abstract class, but it classes
-                    inheriting this class.}
+  \item{listLayers()}{Not implemented in this abstract class, but it classes
+        inheriting this class.}
   \item{getLayer}{Not implemented in this abstract class, but it classes
-                  inheriting this class.}
+        inheriting this class.}
+  \item{getRaster}{Get a raster layer from WFS }
 }
 }
 
