@@ -12,19 +12,44 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#' WFS client abstract class
+#' Class represeting a WFS client
 #' 
-#' An abstract class to represent OGC's WFS.
+#' An abstract class to represent OGC's WFS client in R. Other client classes
+#' in this package inherit this this class.
 #' 
-#' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, \code{\link{WFSRequest}}
+#' @docType class
+#' @format \code{\link{R6Class}} object.
+#' 
 #' @usage NULL
-#' @format NULL
+#' 
+#' @field test
+#' 
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(request)}}{This method is used to create object of this 
+#'         class with \code{request} as the request object containing WFS
+#'         connection information and methods. NOTE: as this is abstract class,
+#'         you shouldn't be creating instances of it.}
+#'   \item{setRequest(request)}{Set client's request object to \code{request}, 
+#'         which must inherit from \code{\link{WFSRequest}}.}
+#'   \item{listLayers()}{Not implemented in this abstract class, but it classes
+#'         inheriting this class.}
+#'   \item{getLayer}{Not implemented in this abstract class, but it classes
+#'         inheriting this class.}
+#'   \item{getRaster}{Get a raster layer from WFS }
+#' }
+#' 
 #' @import R6
-#' @import sp
-#' @import rgdal
-#' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSClient
+#' @import raster
+#' @import sf
 #' @export WFSClient
+#' 
+#' @seealso \code{\link{WFSStreamingClient}}, \code{\link{WFSCachingClient}}, 
+#'          \code{\link{WFSRequest}}
+#' @author Jussi Jousimo \email{jvj@@iki.fi},
+#'         Joona Lehtomaki \email{joona.lehtomaki@@gmail.com}
+#'         
+#' 
 WFSClient <- R6::R6Class(
   "WFSClient",
   private = list(
@@ -37,11 +62,9 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
-      layers <- try(rgdal::ogrListLayers(dsn = dataSource)) 
+      layers <- try(sf::st_layers(dsn = dataSource)) 
       if (inherits(layers, "try-error")) {
         if (length(grep("Cannot open data source", layers)) == 1) {
-          # GDAL < 1.11.0 returns "Cannot open data source" for connection problems and zero layer responses
-          # GDAL >= 1.11.0 returns no layers for zero layer responses
           warning("Unable to connect to the data source or error in query result.")
           return(character(0))
         }
@@ -51,7 +74,7 @@ WFSClient <- R6::R6Class(
       return(layers)
     },
     
-    .getLayer = function(dataSource, layer, crs = NULL, swapAxisOrder = FALSE) {
+    .getLayer = function(dataSource, layer, ...) {
       if (missing(dataSource)) {
         stop("Required argument 'dataSource' missing.")
         }
@@ -61,9 +84,9 @@ WFSClient <- R6::R6Class(
       if (!inherits(dataSource, "character")) {
         stop("Argument 'dataSource' must be a descendant of class 'character'.")
       }
-
-      response <- try(rgdal::readOGR(dsn = dataSource, layer = layer, p4s = crs, 
-                                     stringsAsFactors = FALSE))
+    
+      response <- try(sf::st_read(dsn = dataSource, layer = layer,
+                                  stringsAsFactors = FALSE, ...))
       if (inherits(response, "try-error")) {
         if (length(grep("Cannot open data source", response)) == 1) {
           warning("Unable to connect to the data source or error in query result.")
@@ -72,14 +95,6 @@ WFSClient <- R6::R6Class(
         else {
           stop("Fatal error.")
         }
-      }
-      
-      # Hack and will be removed once rgdal 0.9 becomes available in CRAN
-      if (swapAxisOrder) {
-        xy <- sp::coordinates(response)
-        response@coords <- xy[,2:1]
-        response@bbox <- response@bbox[2:1,]
-        rownames(response@bbox) <- rownames(response@bbox)[2:1]
       }
       
       return(response)
@@ -115,8 +130,7 @@ WFSClient <- R6::R6Class(
       stop("Unimplemented method.", call. = FALSE)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, 
-                        parameters) {
+    getLayer = function(layer, ...) {
       stop("Unimplemented method.")
     },
     
@@ -147,7 +161,6 @@ WFSClient <- R6::R6Class(
 #' @usage NULL
 #' @format NULL
 #' @import R6
-#' @import rgdal
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSStreamingClient
 #' @export WFSStreamingClient
@@ -162,14 +175,14 @@ WFSStreamingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder= FALSE, parameters) {
+    getLayer = function(layer, ...) {
       if (missing(layer)) {
         stop("Required argument 'layer' missing.")
       }
       message("Reading layers directly from the data source\n", 
               private$request$getDataSource()) 
       response <- private$.getLayer(dataSource = private$request$getDataSource(), 
-                                    layer = layer, crs = crs, swapAxisOrder = swapAxisOrder)
+                                    layer = layer, ...)
       return(response)
     }
   )
@@ -182,7 +195,6 @@ WFSStreamingClient <- R6::R6Class(
 #' @usage NULL
 #' @format NULL
 #' @import R6
-#' @import rgdal
 #' @import digest
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
 #' @exportClass WFSCachingClient
@@ -240,29 +252,17 @@ WFSCachingClient <- R6::R6Class(
       return(layers)
     },
     
-    getLayer = function(layer, crs = NULL, swapAxisOrder = FALSE, parameters) {
+    getLayer = function(layer, ...)  {
+      
+      # If a character is returned, there is no destFile
       if (is.character(private$cacheResponse())) {
         return(character(0))
       }
-      
+      # Get the path to the response file
       sourceFile <- private$cachedResponseFile
-      if (!missing(parameters)) {
-        ogr2ogrParams <- ""
-        # -splitlistfields not needed for rgdal >= 0.9.1
-        if (!is.null(parameters$splitListFields) && parameters$splitListFields) {
-          ogr2ogrParams <- paste(ogr2ogrParams, "-splitlistfields")
-        }
-        if (!is.null(parameters$explodeCollections) && parameters$explodeCollections) {
-          ogr2ogrParams <- paste(ogr2ogrParams, "-explodecollections")
-        }
-        if (ogr2ogrParams != "") {
-          sourceFile <- convertOGR(sourceFile = private$cachedResponseFile, 
-                                   layer = layer, parameters = ogr2ogrParams)
-        }
-      }
-      
-      response <- private$.getLayer(dataSource = sourceFile, layer = layer, crs = crs, 
-                                    swapAxisOrder = swapAxisOrder)
+      # Use (cached) response file path as data source. 
+      response <- private$.getLayer(dataSource = sourceFile, 
+                                    layer = layer, ...)
       return(response)
     }
   )

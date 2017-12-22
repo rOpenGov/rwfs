@@ -67,12 +67,16 @@ WFSStreamingRequest <- R6::R6Class(
         return("")
       }
       x <- lapply(seq_along(private$parameters),
-                  function(i) {paste(names(private$parameters)[[i]], private$parameters[[i]], sep = "=")})
+                  function(i) {paste(names(private$parameters)[[i]], 
+                                     private$parameters[[i]], sep = "=")})
       p <- paste(x, collapse = "&")
       return(p)
     }
   ),
   public = list(
+    getParameters = function() {
+      return(private$parameters)
+    },
     setPath = function(path) {
       private$path <- path
       return(invisible(self))

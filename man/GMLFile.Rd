@@ -11,4 +11,3 @@ A class for providing a file name reference to a GML document.
 Jussi Jousimo \email{jvj@iki.fi}
 }
 \keyword{datasets}
-

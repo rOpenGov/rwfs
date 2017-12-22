@@ -7,11 +7,10 @@
 \description{
 Dispatches a WFS request and parses response from the stream directly.
 }
-\author{
-Jussi Jousimo \email{jvj@iki.fi}
-}
 \seealso{
 \code{\link{WFSRequest}}, \code{\link{WFSCachingClient}}
 }
+\author{
+Jussi Jousimo \email{jvj@iki.fi}
+}
 \keyword{datasets}
-

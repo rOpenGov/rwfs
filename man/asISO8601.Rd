@@ -13,12 +13,13 @@ asISO8601(dt)
 Character string in ISO8601 format.
 }
 \description{
-Converts an object which can be converted to a POSIXlt object to a ISO8601 date time string.
+Converts an object which can be converted to a POSIXlt object to a ISO8601 
+date time string.
 }
 \examples{
 asISO8601("2014-01-01")
+
 }
 \author{
 Jussi Jousimo \email{jvj@iki.fi}
 }
-
