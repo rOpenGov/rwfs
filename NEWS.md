@@ -2,11 +2,12 @@
 
 ### MAJOR CHANGES
 
-+ `ogr2ogr` command-line conversion is not required anymore for
-reading in data, even from WFS 2.0.0 source. It is still available
-as an optional feature in `WFSCachingClient`. This change should
-make it easier to use the package on various platforms where
-`ogr2ogr` is not necessarily available or easy to set up.
++ Switch to using `sf` instead of `rgdal`.
++ Streaming directly from WFS supported properly.
++ `ogr2ogr` command-line conversion (or GDAL more broadly) is 
+not required anymore for reading in data, even from 
+WFS 2.0.0 source.
++ Internal function `convertOGR()` removed.
 
 ### NEW FEATURES
 
@@ -16,4 +17,5 @@ for quering the request object's current parameters.
 ### OTHER
 
 + Basic tests using `testthat` in place.
-+ Use `download.file(methods = "internal", mode = "wb")` in `ẀFSClient::getRaster()`.
++ Use `download.file(methods = "internal", mode = "wb")` 
+in `ẀFSClient::getRaster()`.

@@ -15,7 +15,7 @@ WFS client for R
 
 ### Overview
 
-This R package provides a client to access a [Web Feature Service](http://www.opengeospatial.org/standards/wfs) (WFS).
+This R package provides a client to access a [Web Feature Service](http://www.opengeospatial.org/standards/wfs) (WFS). Its core functionality is build on top of [`sf`](https://CRAN.R-project.org/package=sf) package.
 
 ### Usage
 
