@@ -26,7 +26,7 @@ WFSRequest <- R6::R6Class(
   "WFSRequest",
   public = list(
     getDataSource = function() {
-      stop("getDataSource() must be implemented by the subclass.", call.=FALSE)
+      stop("getDataSource() must be implemented by the subclass.", call. = FALSE)
     },
     
     print = function(...) {
@@ -36,7 +36,10 @@ WFSRequest <- R6::R6Class(
   )
 )
 
-#' @title An abstract class for building a URL reference to a WFS
+#' An abstract class for building a URL reference to a WFS
+#' 
+#' An abstract class for building a URL reference to a WFS.
+#' 
 #' @import R6
 #' @usage NULL
 #' @format NULL
@@ -51,26 +54,29 @@ WFSStreamingRequest <- R6::R6Class(
     parameters = NULL,
     
     getPathString = function() {
-      if (is.null(private$path) | length(private$path) == 0) return("")
-      p <- paste(private$path, collapse="/")
+      if (is.null(private$path) | length(private$path) == 0) {
+        return("")
+      }
+      p <- paste(private$path, collapse = "/")
       return(p)
     },
     
     getParametersString = function() {
       private$parameters[sapply(private$parameters, is.null)] <- NULL
-      if (is.null(private$parameters) | length(private$parameters) == 0) return("")
+      if (is.null(private$parameters) | length(private$parameters) == 0) {
+        return("")
+      }
       x <- lapply(seq_along(private$parameters),
-                  function(i) paste(names(private$parameters)[[i]], private$parameters[[i]], sep="="))
-      p <- paste(x, collapse="&")
+                  function(i) {paste(names(private$parameters)[[i]], 
+                                     private$parameters[[i]], sep = "=")})
+      p <- paste(x, collapse = "&")
       return(p)
     }
-        
-    #getStreamURL = function() {
-    #  return(paste0("WFS:", self$getURL()))
-    #},
-    
   ),
   public = list(
+    getParameters = function() {
+      return(private$parameters)
+    },
     setPath = function(path) {
       private$path <- path
       return(invisible(self))
@@ -81,18 +87,26 @@ WFSStreamingRequest <- R6::R6Class(
       return(invisible(self))
     },
     
-    # Operations supported for WFS 1.0.0, see more info:
+    # Operations supported for WFS 1.0.0, 1.1.0 and 2.0.0 see more info:
     # http://docs.geoserver.org/stable/en/user/services/wfs/reference.html
+    #
+    # Notable differences:
+    #  - "typeNames" is "typeName" in WFS 2.0.0 
     
     getCapabilities = function(version="1.0.0", ...) {
-      self$setParameters(service="WFS", version=version, request="GetCapabilities", ...)
+      self$setParameters(service = "WFS", version = version, 
+                         request = "GetCapabilities", ...)
       return(invisible(self))
     },
     
-    getFeature = function(version="1.0.0", typeName, ...) {
-      if (missing(typeName))
-        stop("Argument 'typeName' missing.")
-      self$setParameters(service="WFS", version=version, request="GetFeature", typeName=typeName, ...)
+    getFeature = function(version = "1.0.0", typeNames, ...) {
+      if (version == "2.0.0") {
+        self$setParameters(service = "WFS", version = version, 
+                           request = "GetFeature", typeNames = typeNames, ...)
+      } else {
+        self$setParameters(service = "WFS", version = version, 
+                           request = "GetFeature", typeName = typeNames, ...)
+      }
     }
   )
 )
@@ -110,7 +124,7 @@ WFSCachingRequest <- R6::R6Class(
   inherit = WFSStreamingRequest,
   private = list(
     getURL = function() {
-      stop("getURL() must be implemented by the subclass.", call.=FALSE)
+      stop("getURL() must be implemented by the subclass.", call. = FALSE)
     }
   ),
   public = list(
@@ -122,16 +136,13 @@ WFSCachingRequest <- R6::R6Class(
         return(character(0))
       }
       return(destFile)      
-    },
-    
-    print = function(...) {
-      cat(private$getURL(), "\n")
-      return(invisible(self))
     }
-  )
-)
+))
 
-#' @title A class for providing a file name reference to a GML document
+#' A class for providing a file name reference to a GML document
+#' 
+#' A class for providing a file name reference to a GML document.
+#' 
 #' @usage NULL
 #' @format NULL
 #' @import R6
@@ -146,10 +157,12 @@ GMLFile <- R6::R6Class(
   ),
   public = list(
     initialize = function(srcFile) {
-      if (missing(srcFile))
+      if (missing(srcFile)) {
         stop("Required argument 'srcFile' missing.")
-      if (!file.exists(srcFile))
+      }
+      if (!file.exists(srcFile)) {
         stop(paste0("File '", srcFile, "' does not exist."))
+      }
       private$srcFile <- srcFile
     },
     

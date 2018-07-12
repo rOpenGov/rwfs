@@ -1,41 +1,45 @@
+
 rwfs
 ====
 
+[![Join the chat at https://gitter.im/rOpenGov/rwfs](https://badges.gitter.im/rOpenGov/rwfs.svg)](https://gitter.im/rOpenGov/rwfs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build Status](https://api.travis-ci.org/rOpenGov/rwfs.png)](https://travis-ci.org/rOpenGov/rwfs)
-[![Stories in Ready](https://badge.waffle.io/ropengov/rwfs.png?label=Ready)](http://waffle.io/ropengov/rwfs)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rOpenGov/rwfs?branch=master&svg=true)](https://ci.appveyor.com/project/rOpenGov/rwfs)
+[![codecov](https://codecov.io/gh/rOpenGov/rwfs/branch/master/graph/badge.svg)](https://codecov.io/gh/rOpenGov/rwfs)
 
 WFS client for R
 
-+ Maintainers: [Jussi Jousimo](http://www.github.com/statguy/)
++ Original author: [Jussi Jousimo](http://www.github.com/statguy/)
++ Maintainers: [Joona Lehtomäki](https://github.com/jlehtoma)
 + License: FreeBSD
 
 ### Overview
 
-This R package provides a client to access a [Web Feature Service](http://www.opengeospatial.org/standards/wfs) (WFS).
+This R package provides a client to access a [Web Feature Service](http://www.opengeospatial.org/standards/wfs) (WFS). Its core functionality is build on top of [`sf`](https://CRAN.R-project.org/package=sf) package.
 
 ### Usage
 
 #### Installation
 
-The `rwfs` package requires `R6`, `rgal` and `raster` (optional) packages. Please refer to the
-[gisfin tutorial](https://github.com/rOpenGov/gisfin/blob/master/vignettes/gisfin_tutorial.md) for installation instructions of `rgdal`.
-The package can be installed from github using `devtools`
-```
+`rwfs` can be installed from GitHub using `devtools`:
+
+```r
 install.packages("devtools")
 library("devtools")
-install_github("ropengov/gisfin")
+devtools::install_github("ropengov/rwfs")
 ```
+
 and loaded with
-```
+
+```r
 library(rwfs)
 ```
 
 #### Request and client classes
 
-The package consists of request and client classes which are of type
-[R6](http://cran.r-project.org/web/packages/R6/vignettes/Introduction.html).
-The request classes are used to construct a reference to a data source and provide access methods to the data.
-The client classes dispatch a request to obtain and possibly manipulate the data.
+The package consists of request and client classes which are of type [R6](https://CRAN.R-project.org/package=R6/vignettes/Introduction.html). The request classes are used to construct a reference to a data source and provide access methods to the data. The client classes dispatch a request to obtain and possibly manipulate the data.
 
 The request classes currently implemented are
 
@@ -43,31 +47,22 @@ The request classes currently implemented are
 * `WFSCachingRequest` for downloading data from a WFS and caching it to disk and
 * `GMLFile` for reading data from a [GML](http://en.wikipedia.org/wiki/Geography_Markup_Language) file.
 
-All request classes are abstract with the exception of `GMLFile` meaning that the user of `rwfs` must provide a subclass
-for each relevant class and implement abstract methods in the classes. The user may provide additional methods for
-accessing the data for convenience.
-
-Due to limited support for WFS 2.x in the `rgdal` package, which the `rwfs` package depends on, data in WFS 2.x is
-accessible only via downloading the data first and thus no streaming can be used (at least in some services).
+All request classes are abstract with the exception of `GMLFile` meaning that the user of `rwfs` must provide a subclass for each relevant class and implement abstract methods in the classes. The user may provide additional methods for accessing the data for convenience.
 
 The following client classes are currently implemented
 
 * `WFSStreamingClient` for streaming requests and
 * `WFSCachingClient` for downloading and caching requests and for local file access requests.
 
-The client classes are available to be used directly. However, additional methods for manipulating data for user convenience
-can be provided by inheriting the classes.
+The client classes are available to be used directly. However, additional methods for manipulating data for user convenience can be provided by inheriting the classes.
 
-In the following sections, we illustrate the use of the `rwfs` package by following two examples taken from the packages
-[gisfin](https://github.com/rOpenGov/gisfin) and [fmi](https://github.com/rOpenGov/fmi).
+In the following sections, we illustrate the use of the `rwfs` package by following two examples taken from the packages [gisfin](https://github.com/rOpenGov/gisfin) and [fmi](https://github.com/rOpenGov/fmi).
 
 #### Inheritance of request classes
 
-For streaming, the `WFSStreamingRequest` abstract class is required to be inherited to a subclass that implements the abstract
-method `getDataSource()`, which provides a data access reference. For example
-(taken from [gisfin](https://github.com/rOpenGov/gisfin/blob/master/R/GeoStatFi.R)), the following class provides a URL
-to access data with the private method `getURL()`, which is called from `getDataSource()`:
-```
+For streaming, the `WFSStreamingRequest` abstract class is required to be inherited to a subclass that implements the abstract method `getDataSource()`, which provides a data access reference. For example (taken from [gisfin](https://github.com/rOpenGov/gisfin/blob/master/R/GeoStatFi.R)), the following class provides a URL to access data with the private method `getURL()`, which is called from `getDataSource()`:
+
+```r
 GeoStatFiWFSRequest <- R6::R6Class(
   "GeoStatFiWFSRequest",
   inherit = rwfs::WFSStreamingRequest,
@@ -107,13 +102,12 @@ GeoStatFiWFSRequest <- R6::R6Class(
   )
 )
 ```
-The method `getGeoStatFiLayers(path)` lists available layers by setting `path`, which refers to the data set behind `path` in the service,
-and the method `getGeoStatFiLayer(path, layers)` which obtains the `layer` layer from the `path` data set. The rest of the methods are for
-convenience purpose for the user that cover the available data sets in the service.
 
-Similar to `WFSStreamingRequest`, `WFSCachingRequest` must implement the `getURL` abstract method
-(example taken from [fmi](https://github.com/rOpenGov/fmi/blob/master/R/FMIWFSRequest.R)):
-```
+The method `getGeoStatFiLayers(path)` lists available layers by setting `path`, which refers to the data set behind `path` in the service, and the method `getGeoStatFiLayer(path, layers)` which obtains the `layer` layer from the `path` data set. The rest of the methods are for convenience purpose for the user that cover the available data sets in the service.
+
+Similar to `WFSStreamingRequest`, `WFSCachingRequest` must implement the `getURL` abstract method (example taken from [fmi](https://github.com/rOpenGov/fmi/blob/master/R/FMIWFSRequest.R)):
+
+```r
 FMIWFSRequest <- R6::R6Class(
   "FMIWFSRequest",
   inherit = rwfs::WFSCachingRequest,
@@ -134,18 +128,16 @@ FMIWFSRequest <- R6::R6Class(
   )
 )
 ```
+
 Here the class provides also a mechnism for storing an API key, which is required to access the service.
 
 #### Inheritance of client classes
 
-Continuing with the example from [gisfin](https://github.com/rOpenGov/gisfin/blob/master/R/GeoStatFi.R), there
-is no need to inherit `WFSStreamingClient`. However, for consistency the package provides the class
-`GeoStatFiWFSClient` inheriting `WFSStreamingClient`, which is exactly the same class but with a different name.
+Continuing with the example from [gisfin](https://github.com/rOpenGov/gisfin/blob/master/R/GeoStatFi.R), there is no need to inherit `WFSStreamingClient`. However, for consistency the package provides the class `GeoStatFiWFSClient` inheriting `WFSStreamingClient`, which is exactly the same class but with a different name.
 
-The `FMIWFSClient` class inheriting `WFSCachingClient` in the [fmi](https://github.com/rOpenGov/fmi/blob/master/R/FMIWFSClient.R)
-example, sets the service access parameters and returns data after formatting it. For example, the `getMonthlyWeatherRaster`
-calls the `setParameters()` method in the request object and the `getRaster()` in the superclass to obtain a `raster` object.
-```
+The `FMIWFSClient` class inheriting `WFSCachingClient` in the [fmi](https://github.com/rOpenGov/fmi/blob/master/R/FMIWFSClient.R) example, sets the service access parameters and returns data after formatting it. For example, the `getMonthlyWeatherRaster` calls the `setParameters()` method in the request object and the `getRaster()` in the superclass to obtain a `raster` object.
+
+```r
 FMIWFSClient <- R6::R6Class(
   "FMIWFSClient",
   inherit = rwfs::WFSCachingClient,
@@ -187,20 +179,20 @@ FMIWFSClient <- R6::R6Class(
   )
 )
 ```
-The `getMonthlyWeatherRaster()` method first checks that request object has been given and it is of the type
-`FMIWFSRequest`. The method also does some data manipulation such as setting layer names for the `raster` object.
+
+The `getMonthlyWeatherRaster()` method first checks that request object has been given and it is of the type`FMIWFSRequest`. The method also does some data manipulation such as setting layer names for the `raster` object.
 
 #### Accessing WFS
 
-Once we have defined appropriate subclasses, we can build a request object and access WFS to obtain
-data with a client object. For examples, please look at the vignettes in the
+Once we have defined appropriate subclasses, we can build a request object and access WFS to obtain data with a client object. For examples, please look at the vignettes in the
 [gisfin](https://github.com/rOpenGov/gisfin/blob/master/vignettes/gisfin_tutorial.md) and in the
 [fmi](https://github.com/rOpenGov/fmi/blob/master/vignettes/fmi_tutorial.md) packages.
 
 #### File access
 
 An example to access a local GML file:
-```
+
+```r
 library(rwfs)
 fileName <- tempfile()
 download.file("http://geo.stat.fi/geoserver/vaestoalue/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=vaestoalue:suuralue_vaki2014", fileName)
@@ -216,13 +208,13 @@ unlink(fileName)
 
   You are welcome to:
 
-  * [submit suggestions and bug-reports](https://github.com/ropengov/rwfs/issues)
-  * [submit a pull-request](https://github.com/rOpenGov/rwfs/pulls)
-  * compose a friendly e-mail to: [jvj@iki.fi](mailto:jvj@iki.fi)
-  * join IRC at !louhos@IRCnet (Finland) and ropengov@Freenode (international)
-  * follow us in social media: Louhos (Finland); rOpenGov (international)
+* [submit suggestions and bug-reports](https://github.com/ropengov/rwfs/issues)
+* [submit a pull-request](https://github.com/rOpenGov/rwfs/pulls)
+    * compose a friendly e-mail to: [jvj@iki.fi](mailto:jvj@iki.fi)
+    * join IRC at !louhos@IRCnet (Finland) and ropengov@Freenode (international)
+    * follow us in social media: Louhos (Finland); rOpenGov (international)
 
 ### Acknowledgements
 
-  Roger Bivand for helping with the rgdal package.
-  
+  Roger Bivand for helping with getting the WFS driver working on Windows.
+
