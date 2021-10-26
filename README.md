@@ -6,8 +6,7 @@ rwfs
 
 [![rOG-badge](https://ropengov.github.io/rogtemplate/reference/figures/ropengov-badge.svg)](http://ropengov.org/)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![R build
-status](https://github.com/rOpenGov/rwfs/workflows/R-CMD-check/badge.svg)](https://github.com/rOpenGov/rwfs/actions)
+[![R-CMD-check](https://github.com/rOpenGov/rwfs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rOpenGov/rwfs/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/rOpenGov/rwfs/branch/master/graph/badge.svg?token=EYAW1s4jIc)](https://app.codecov.io/gh/rOpenGov/rwfs)
 
 <!-- badges: end -->
