@@ -17,7 +17,6 @@
 #' An abstract class to represent OGC's WFS client in R. Other client classes
 #' in this package inherit this this class.
 #' 
-#' @docType class
 #' @format \code{\link{R6Class}} object.
 #' 
 #' @usage NULL
@@ -161,8 +160,7 @@ WFSClient <- R6::R6Class(
 #' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSStreamingClient
-#' @export WFSStreamingClient
+#' @export 
 WFSStreamingClient <- R6::R6Class(
   "WFSStreamClient",
   inherit = WFSClient,
@@ -196,8 +194,7 @@ WFSStreamingClient <- R6::R6Class(
 #' @import R6
 #' @import digest
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSCachingClient
-#' @export WFSCachingClient
+#' @export 
 WFSCachingClient <- R6::R6Class(
   "WFSCachingClient",
   inherit = WFSClient,

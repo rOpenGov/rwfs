@@ -20,8 +20,7 @@
 #' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSRequest
-#' @export WFSRequest
+#' @export 
 WFSRequest <- R6::R6Class(
   "WFSRequest",
   public = list(
@@ -44,8 +43,7 @@ WFSRequest <- R6::R6Class(
 #' @usage NULL
 #' @format NULL
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSStreamingRequest
-#' @export WFSStreamingRequest
+#' @export 
 WFSStreamingRequest <- R6::R6Class(
   "WFSStreamingRequest",
   inherit = WFSRequest,
@@ -117,8 +115,7 @@ WFSStreamingRequest <- R6::R6Class(
 #' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass WFSCachingRequest
-#' @export WFSCachingRequest
+#' @export 
 WFSCachingRequest <- R6::R6Class(
   "WFSCachingRequest",
   inherit = WFSStreamingRequest,
@@ -147,8 +144,7 @@ WFSCachingRequest <- R6::R6Class(
 #' @format NULL
 #' @import R6
 #' @author Jussi Jousimo \email{jvj@@iki.fi}
-#' @exportClass GMLFile
-#' @export GMLFile
+#' @export 
 GMLFile <- R6::R6Class(
   "GMLFile",
   inherit = WFSRequest,
