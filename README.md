@@ -1,11 +1,10 @@
 
-rwfs
-====
+# rwfs <a href='https://ropengov.github.io/rwfs/'><img src="man/figures/logo.png" align="right" height="139"/></a>
 
 <!-- badges: start -->
 
 [![rOG-badge](https://ropengov.github.io/rogtemplate/reference/figures/ropengov-badge.svg)](http://ropengov.org/)
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
 [![R-CMD-check](https://github.com/rOpenGov/rwfs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rOpenGov/rwfs/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/rOpenGov/rwfs/branch/master/graph/badge.svg?token=EYAW1s4jIc)](https://app.codecov.io/gh/rOpenGov/rwfs)
 
@@ -13,13 +12,13 @@ rwfs
 
 WFS client for R
 
-+ Original author: [Jussi Jousimo](http://www.github.com/statguy/)
++ Original author: [Jussi Jousimo](https://github.com/statguy/)
 + Maintainers: [Joona Lehtomäki](https://github.com/jlehtoma)
 + License: FreeBSD
 
 ### Overview
 
-This R package provides a client to access a [Web Feature Service](http://www.opengeospatial.org/standards/wfs) (WFS). Its core functionality is build on top of [`sf`](https://CRAN.R-project.org/package=sf) package.
+This R package provides a client to access a [Web Feature Service](https://www.ogc.org/standards/wfs) (WFS). Its core functionality is build on top of [`sf`](https://CRAN.R-project.org/package=sf) package.
 
 ### Usage
 
@@ -41,13 +40,13 @@ library(rwfs)
 
 #### Request and client classes
 
-The package consists of request and client classes which are of type [R6](https://CRAN.R-project.org/package=R6/vignettes/Introduction.html). The request classes are used to construct a reference to a data source and provide access methods to the data. The client classes dispatch a request to obtain and possibly manipulate the data.
+The package consists of request and client classes which are of type [R6](https://r6.r-lib.org/articles/Introduction.html). The request classes are used to construct a reference to a data source and provide access methods to the data. The client classes dispatch a request to obtain and possibly manipulate the data.
 
 The request classes currently implemented are
 
 * `WFSStreamingRequest` for streaming data directly from a WFS,
 * `WFSCachingRequest` for downloading data from a WFS and caching it to disk and
-* `GMLFile` for reading data from a [GML](http://en.wikipedia.org/wiki/Geography_Markup_Language) file.
+* `GMLFile` for reading data from a [GML](https://en.wikipedia.org/wiki/Geography_Markup_Language) file.
 
 All request classes are abstract with the exception of `GMLFile` meaning that the user of `rwfs` must provide a subclass for each relevant class and implement abstract methods in the classes. The user may provide additional methods for accessing the data for convenience.
 
