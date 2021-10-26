@@ -3,7 +3,6 @@
 \docType{package}
 \name{rwfs}
 \alias{rwfs}
-\alias{rwfs-package}
 \title{WFS client for R}
 \description{
 This R package provides a client to access Web Feature Services (WFS) (\url{http://www.opengeospatial.org/standards/wfs}).

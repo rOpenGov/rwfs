@@ -21,7 +21,8 @@ Imports:
     digest,
     R6,
     raster,
-    sf
+    sf,
+    sp
 Suggests:
     knitr,
     rmarkdown,
@@ -29,6 +30,6 @@ Suggests:
     testthat
 Encoding: UTF-8
 LazyLoad: yes
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.2
 X-schema.org-isPartOf: http://ropengov.org/
 X-schema.org-keywords: ropengov
