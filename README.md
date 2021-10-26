@@ -2,12 +2,15 @@
 rwfs
 ====
 
-[![Join the chat at https://gitter.im/rOpenGov/rwfs](https://badges.gitter.im/rOpenGov/rwfs.svg)](https://gitter.im/rOpenGov/rwfs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<!-- badges: start -->
 
+[![rOG-badge](https://ropengov.github.io/rogtemplate/reference/figures/ropengov-badge.svg)](http://ropengov.org/)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Build Status](https://api.travis-ci.org/rOpenGov/rwfs.png)](https://travis-ci.org/rOpenGov/rwfs)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rOpenGov/rwfs?branch=master&svg=true)](https://ci.appveyor.com/project/rOpenGov/rwfs)
-[![codecov](https://codecov.io/gh/rOpenGov/rwfs/branch/master/graph/badge.svg)](https://codecov.io/gh/rOpenGov/rwfs)
+[![R build
+status](https://github.com/rOpenGov/rwfs/workflows/R-CMD-check/badge.svg)](https://github.com/rOpenGov/rwfs/actions)
+[![codecov](https://codecov.io/gh/rOpenGov/rwfs/branch/master/graph/badge.svg?token=EYAW1s4jIc)](https://app.codecov.io/gh/rOpenGov/rwfs)
+
+<!-- badges: end -->
 
 WFS client for R
 

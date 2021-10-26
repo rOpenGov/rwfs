@@ -17,3 +17,5 @@ cran-comments.md
 
 # Code coverage
 codecov.yml
+
+^\.github$
