@@ -130,7 +130,7 @@ WFSCachingRequest <- R6::R6Class(
   public = list(
     getDataSource = function() {
       destFile <- tempfile()
-      success <- download.file(private$getURL(), destFile, "internal")
+      success <- download.file(private$getURL(), destFile, mode = "wb")
       if (success != 0) {
         warning("Query failed.")
         return(character(0))

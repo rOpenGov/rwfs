@@ -142,8 +142,7 @@ WFSClient <- R6::R6Class(
       
       destFile <- tempfile()
       # NOTE! mode = "wb" is required on Windows.
-      success <- download.file(rasterURL, destfile = destFile, 
-                               method = "internal", mode = "wb")
+      success <- download.file(rasterURL, destfile = destFile, mode = "wb")
       if (success != 0) {
         warning("Failed to download raster file.")
         return(character())
