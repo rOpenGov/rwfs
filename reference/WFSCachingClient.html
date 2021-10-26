@@ -59,6 +59,77 @@ using ogr2ogr of RGDAL. Provides a caching mechanism for subsequent queries on t
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Jussi Jousimo <a href="mailto:jvj@iki.fi">jvj@iki.fi</a></p>
     </div>
+    <div class="section level2">
+    <h2 id="super-class">Super class<a class="anchor" aria-label="anchor" href="#super-class"></a></h2>
+    <p><code><a href="WFSClient.html">rwfs::WFSClient</a></code> -&gt; <code>WFSCachingClient</code></p>
+    </div>
+    <div class="section level2">
+    <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
+    
+<div class="section">
+<h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
+
+<ul><li><p><a href="#method-saveGMLFile"><code>WFSCachingClient$saveGMLFile()</code></a></p></li>
+<li><p><a href="#method-loadGMLFile"><code>WFSCachingClient$loadGMLFile()</code></a></p></li>
+<li><p><a href="#method-listLayers"><code>WFSCachingClient$listLayers()</code></a></p></li>
+<li><p><a href="#method-getLayer"><code>WFSCachingClient$getLayer()</code></a></p></li>
+<li><p><a href="#method-clone"><code>WFSCachingClient$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="rwfs" data-topic="WFSClient" data-id="getRaster"><a href="WFSClient.html#method-getRaster"><code>rwfs::WFSClient$getRaster()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="rwfs" data-topic="WFSClient" data-id="initialize"><a href="WFSClient.html#method-initialize"><code>rwfs::WFSClient$initialize()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="rwfs" data-topic="WFSClient" data-id="setRequest"><a href="WFSClient.html#method-setRequest"><code>rwfs::WFSClient$setRequest()</code></a></span></p></li>
+</ul></details></p><hr><a id="method-saveGMLFile"></a><div class="section">
+<h3 id="method-savegmlfile-">Method <code>saveGMLFile()</code><a class="anchor" aria-label="anchor" href="#method-savegmlfile-"></a></h3>
+
+<div class="section">
+<h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
+<p></p><div class="r"><pre><code><span class="va">WFSCachingClient</span><span class="op">$</span><span class="fu">saveGMLFile</span><span class="op">(</span><span class="va">destFile</span><span class="op">)</span></code></pre><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-loadGMLFile"></a><div class="section">
+<h3 id="method-loadgmlfile-">Method <code>loadGMLFile()</code><a class="anchor" aria-label="anchor" href="#method-loadgmlfile-"></a></h3>
+
+<div class="section">
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<p></p><div class="r"><pre><code><span class="va">WFSCachingClient</span><span class="op">$</span><span class="fu">loadGMLFile</span><span class="op">(</span><span class="va">fromFile</span><span class="op">)</span></code></pre><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-listLayers"></a><div class="section">
+<h3 id="method-listlayers-">Method <code>listLayers()</code><a class="anchor" aria-label="anchor" href="#method-listlayers-"></a></h3>
+
+<div class="section">
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<p></p><div class="r"><pre><code><span class="va">WFSCachingClient</span><span class="op">$</span><span class="fu">listLayers</span><span class="op">(</span><span class="op">)</span></code></pre><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-getLayer"></a><div class="section">
+<h3 id="method-getlayer-">Method <code>getLayer()</code><a class="anchor" aria-label="anchor" href="#method-getlayer-"></a></h3>
+
+<div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><pre><code><span class="va">WFSCachingClient</span><span class="op">$</span><span class="fu">getLayer</span><span class="op">(</span><span class="va">layer</span>, <span class="va">...</span><span class="op">)</span></code></pre><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p>The objects of this class are cloneable with this method.</p><div class="section">
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<p></p><div class="r"><pre><code><span class="va">WFSCachingClient</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></p></div>
+</div>
+
+</div>
+
+    </div>
     </div>
 
   </div>
