@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2014
+    COPYRIGHT HOLDER: Jussi Jousimo
