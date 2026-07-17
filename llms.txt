@@ -20,6 +20,7 @@ functionality is build on top of
 `rwfs` can be installed from GitHub using `devtools`:
 
 ``` r
+
 install.packages("devtools")
 library("devtools")
 devtools::install_github("ropengov/rwfs")
@@ -28,6 +29,7 @@ devtools::install_github("ropengov/rwfs")
 and loaded with
 
 ``` r
+
 library(rwfs)
 ```
 
@@ -78,6 +80,7 @@ the following class provides a URL to access data with the private
 method `getURL()`, which is called from `getDataSource()`:
 
 ``` r
+
 GeoStatFiWFSRequest <- R6::R6Class(
   "GeoStatFiWFSRequest",
   inherit = rwfs::WFSStreamingRequest,
@@ -130,6 +133,7 @@ Similar to `WFSStreamingRequest`, `WFSCachingRequest` must implement the
 [fmi](https://github.com/rOpenGov/fmi/blob/master/R/FMIWFSRequest.R)):
 
 ``` r
+
 FMIWFSRequest <- R6::R6Class(
   "FMIWFSRequest",
   inherit = rwfs::WFSCachingRequest,
@@ -233,6 +237,7 @@ packages.
 An example to access a local GML file:
 
 ``` r
+
 library(rwfs)
 fileName <- tempfile()
 download.file("http://geo.stat.fi/geoserver/vaestoalue/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=vaestoalue:suuralue_vaki2014", fileName)
